@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dailiriz - Admin Dashboard</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        gold: {
+                            400: '#FFD700',
+                            500: '#DAA520',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c53030;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9b2c2c;
+        }
+        
+        /* Animation for fade-in */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fade-in 0.3s ease-out;
+        }
+        
+        /* Custom checkbox */
+        .custom-checkbox:checked {
+            background-color: #c53030;
+            border-color: #c53030;
+        }
+        
+        .custom-checkbox:checked:after {
+            content: '✓';
+            color: white;
+            position: absolute;
+            font-size: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        /* Table row hover effect */
+        .table-row-hover:hover {
+            background-color: rgba(197, 48, 48, 0.05);
+        }
+        
+        /* Gradient border */
+        .gradient-border {
+            position: relative;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+        
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(to right, #7f1d1d, #dc2626, #f59e0b);
+            border-radius: inherit;
+        }
+        
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-published {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .status-draft {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        .status-archive {
+            background-color: rgba(107, 114, 128, 0.1);
+            color: #4b5563;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+        
+        .status-pending {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #2563eb;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800 flex min-h-screen">
+    
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-64 bg-gradient-to-b from-red-900 to-red-800 text-white flex-shrink-0 flex flex-col h-screen shadow-xl z-20">
+        <div class="p-6 flex items-center justify-between border-b border-red-800">
+            <div class="flex items-center gap-2">
+                <i data-lucide="shield" class="text-amber-200 w-8 h-8"></i>
+                <h1 class="font-serif text-xl font-bold tracking-wide">
+                    Daili<span class="text-amber-200 italic">Riz</span>
+                    <span class="block text-xs text-red-200 font-sans font-normal mt-1">Admin Panel</span>
+                </h1>
+            </div>
+            <button id="sidebar-toggle" class="md:hidden text-red-200 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <nav class="flex-1 px-4 py-6 space-y-1">
+            <a href="#" data-tab="dashboard" class="sidebar-menu-item active">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                <span>Dashboard</span>
+            </a>
+            
+            <a href="#" data-tab="articles" class="sidebar-menu-item">
+                <i data-lucide="file-text" class="w-5 h-5"></i>
+                <span>Artikel</span>
+                <span class="sidebar-badge">142</span>
+            </a>
+            
+            <a href="#" data-tab="moderation" class="sidebar-menu-item">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                <span>Moderasi</span>
+                <span class="sidebar-badge bg-red-500">3</span>
+            </a>
+            
+            <a href="#" data-tab="users" class="sidebar-menu-item">
+                <i data-lucide="users" class="w-5 h-5"></i>
+                <span>Pengguna</span>
+            </a>
+            
+            <a href="#" data-tab="analytics" class="sidebar-menu-item">
+                <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                <span>Analitik</span>
+            </a>
+            
+            <a href="#" data-tab="settings" class="sidebar-menu-item">
+                <i data-lucide="settings" class="w-5 h-5"></i>
+                <span>Pengaturan</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-red-800">
+            <div class="flex items-center gap-3 px-2 py-3">
+                <img src="https://ui-avatars.com/api/?name=Admin+Utama&background=c53030&color=fff" 
+                     class="w-10 h-10 rounded-full border-2 border-amber-200" 
+                     alt="Admin">
+                <div class="flex-1">
+                    <p class="font-medium text-sm">Admin Utama</p>
+                    <p class="text-xs text-red-200">Super Admin</p>
+                </div>
+                <button id="logout-btn" class="text-red-200 hover:text-white p-1">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Navigation Bar -->
+        <div class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-4">
+                <button id="mobile-menu-btn" class="md:hidden text-slate-600 hover:text-red-700">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <div class="relative hidden md:block">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                    <input type="text" placeholder="Cari di admin panel..." 
+                           class="pl-10 pr-4 py-2 border border-slate-200 rounded-full text-sm focus:outline-none focus:border-red-500 w-64">
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button class="relative p-2 text-slate-500 hover:text-red-700 hover:bg-red-50 rounded-full">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-600 rounded-full"></span>
+                </button>
+                
+                <div class="flex items-center gap-2">
+                    <span class="text-sm font-medium text-slate-700 hidden md:block">Admin Utama</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-500"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="flex-1 overflow-y-auto p-4 md:p-6">
+            <!-- Dashboard View (Default) -->
+            <div id="dashboard-view" class="content-view animate-fade-in">
+                <div class="mb-8">
+                    <h2 class="font-serif text-3xl font-bold text-slate-800 mb-2">Dashboard Admin</h2>
+                    <p class="text-slate-600">Selamat datang kembali! Berikut ringkasan aktivitas terbaru.</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 rounded-lg bg-red-50">
+                                <i data-lucide="eye" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                            <span class="text-sm font-medium text-green-500">+12.5%</span>
+                        </div>
+                        <h3 class="text-slate-500 text-sm font-medium mb-1">Total Tayangan</h3>
+                        <p class="text-2xl font-bold text-slate-800">1.2M</p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 rounded-lg bg-amber-50">
+                                <i data-lucide="file-text" class="w-6 h-6 text-amber-600"></i>
+                            </div>
+                            <span class="text-sm font-medium text-green-500">+4.2%</span>
+                        </div>
+                        <h3 class="text-slate-500 text-sm font-medium mb-1">Artikel Baru</h3>
+                        <p class="text-2xl font-bold text-slate-800">142</p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 rounded-lg bg-blue-50">
+                                <i data-lucide="message-square" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                            <span class="text-sm font-medium text-green-500">+28.4%</span>
+                        </div>
+                        <h3 class="text-slate-500 text-sm font-medium mb-1">Komentar</h3>
+                        <p class="text-2xl font-bold text-slate-800">8,542</p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 rounded-lg bg-green-50">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-green-600"></i>
+                            </div>
+                            <span class="text-sm font-medium text-green-500">+7.1%</span>
+                        </div>
+                        <h3 class="text-slate-500 text-sm font-medium mb-1">Tren Pembaca</h3>
+                        <p class="text-2xl font-bold text-slate-800">89%</p>
+                    </div>
+                </div>
+
+                <!-- Recent Articles Table -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
+                    <div class="p-6 border-b border-slate-200 flex justify-between items-center">
+                        <h3 class="font-serif text-xl font-bold text-slate-800">Artikel Terbaru</h3>
+                        <a href="#" class="text-sm font-medium text-red-600 hover:text-red-800 flex items-center gap-1">
+                            Lihat Semua <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 text-sm font-medium border-b border-slate-200">
+                                    <th class="px-6 py-4">Judul Artikel</th>
+                                    <th class="px-6 py-4">Kategori</th>
+                                    <th class="px-6 py-4">Penulis</th>
+                                    <th class="px-6 py-4">Tanggal</th>
+                                    <th class="px-6 py-4">Status</th>
+                                    <th class="px-6 py-4 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="table-row-hover">
+                                    <td class="px-6 py-4">
+                                        <p class="font-semibold text-slate-800">Pembangunan MRT Fase 3 Dimulai</p>
+                                        <p class="text-xs text-slate-500 mt-1">12.5k tayangan</p>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-100">Nasional</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">Budi Santoso</td>
+                                    <td class="px-6 py-4 text-sm text-slate-500">26 Okt 2023</td>
+                                    <td class="px-6 py-4">
+                                        <span class="status-badge status-published">Terbit</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <div class="flex justify-center gap-2">
+                                            <button class="p-1.5 hover:bg-slate-100 text-slate-600 rounded">
+                                                <i data-lucide="edit" class="w-4 h-4"></i>
+                                            </button>
+                                            <button class="p-1.5 hover:bg-red-50 text-red-600 rounded">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="table-row-hover">
+                                    <td class="px-6 py-4">
+                                        <p class="font-semibold text-slate-800">Timnas Indonesia Masuk Final Piala Asia</p>
+                                        <p class="text-xs text-slate-500 mt-1">45.2k tayangan</p>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-100">Olahraga</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">Andi Wijaya</td>
+                                    <td class="px-6 py-4 text-sm text-slate-500">25 Okt 2023</td>
+                                    <td class="px-6 py-4">
+                                        <span class="status-badge status-published">Terbit</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <div class="flex justify-center gap-2">
+                                            <button class="p-1.5 hover:bg-slate-100 text-slate-600 rounded">
+                                                <i data-lucide="edit" class="w-4 h-4"></i>
+                                            </button>
+                                            <button class="p-1.5 hover:bg-red-50 text-red-600 rounded">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr class="table-row-hover">
+                                    <td class="px-6 py-4">
+                                        <p class="font-semibold text-slate-800">Resesi Ekonomi Global 2024</p>
+                                        <p class="text-xs text-slate-500 mt-1">Draft</p>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">Ekonomi</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-slate-600">Siti Rahma</td>
+                                    <td class="px-6 py-4 text-sm text-slate-500">24 Okt 2023</td>
+                                    <td class="px-6 py-4">
+                                        <span class="status-badge status-draft">Draft</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <div class="flex justify-center gap-2">
+                                            <button class="p-1.5 hover:bg-slate-100 text-slate-600 rounded">
+                                                <i data-lucide="edit" class="w-4 h-4"></i>
+                                            </button>
+                                            <button class="p-1.5 hover:bg-red-50 text-red-600 rounded">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-gradient-to-r from-red-50 to-amber-50 p-6 rounded-xl border border-red-100">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="p-3 rounded-lg bg-white">
+                                <i data-lucide="plus-circle" class="w-6 h-6 text-red-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800">Tulis Artikel Baru</h3>
+                                <p class="text-sm text-slate-600">Buat konten berita terbaru</p>
+                            </div>
+                        </div>
+                        <button class="w-full bg-red-600 text-white py-2 rounded-lg font-medium hover:bg-red-700 transition">
+                            Buat Artikel
+                        </button>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-slate-50 to-slate-100 p-6 rounded-xl border border-slate-200">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="p-3 rounded-lg bg-white">
+                                <i data-lucide="shield-check" class="w-6 h-6 text-amber-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800">Moderasi Konten</h3>
+                                <p class="text-sm text-slate-600">3 artikel menunggu persetujuan</p>
+                            </div>
+                        </div>
+                        <button class="w-full bg-white border border-slate-300 text-slate-800 py-2 rounded-lg font-medium hover:bg-slate-50 transition">
+                            Tinjau Sekarang
+                        </button>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-amber-50 to-yellow-50 p-6 rounded-xl border border-amber-100">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="p-3 rounded-lg bg-white">
+                                <i data-lucide="bar-chart-3" class="w-6 h-6 text-amber-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800">Laporan Analitik</h3>
+                                <p class="text-sm text-slate-600">Lihat performa konten minggu ini</p>
+                            </div>
+                        </div>
+                        <button class="w-full bg-amber-500 text-white py-2 rounded-lg font-medium hover:bg-amber-600 transition">
+                            Lihat Laporan
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Articles View (Hidden by default) -->
+            <div id="articles-view" class="content-view hidden animate-fade-in">
+                <!-- Content will be loaded via JavaScript -->
+            </div>
+
+            <!-- Moderation View (Hidden by default) -->
+            <div id="moderation-view" class="content-view hidden animate-fade-in">
+                <!-- Content will be loaded via JavaScript -->
+            </div>
+
+            <!-- Users View (Hidden by default) -->
+            <div id="users-view" class="content-view hidden animate-fade-in">
+                <!-- Content will be loaded via JavaScript -->
+            </div>
+
+            <!-- Analytics View (Hidden by default) -->
+            <div id="analytics-view" class="content-view hidden animate-fade-in">
+                <!-- Content will be loaded via JavaScript -->
+            </div>
+
+            <!-- Settings View (Hidden by default) -->
+            <div id="settings-view" class="content-view hidden animate-fade-in">
+                <!-- Content will be loaded via JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-white border-l-4 border-green-500 text-slate-800 px-6 py-4 rounded shadow-2xl transform translate-y-24 transition-transform duration-300 z-50 flex items-center gap-3">
+        <i data-lucide="check-circle" class="text-green-500"></i>
+        <div>
+            <h4 class="font-bold text-sm">Berhasil!</h4>
+            <p class="text-xs text-slate-600">Tindakan berhasil dijalankan.</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+        
+        // Sidebar toggle for mobile
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.remove('hidden');
+        });
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.add('hidden');
+        });
+        
+        // Sidebar navigation
+        const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item');
+        const contentViews = document.querySelectorAll('.content-view');
+        
+        sidebarMenuItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all items
+                sidebarMenuItems.forEach(i => i.classList.remove('active'));
+                
+                // Add active class to clicked item
+                item.classList.add('active');
+                
+                // Hide all content views
+                contentViews.forEach(view => view.classList.add('hidden'));
+                
+                // Show the selected content view
+                const tabId = item.getAttribute('data-tab');
+                const targetView = document.getElementById(`${tabId}-view`);
+                if (targetView) {
+                    targetView.classList.remove('hidden');
+                    targetView.classList.add('animate-fade-in');
+                }
+                
+                // Close sidebar on mobile after selection
+                if (window.innerWidth < 768) {
+                    sidebar.classList.add('hidden');
+                }
+            });
+        });
+        
+        // Logout button
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                showToast('Berhasil logout!');
+                // In a real app, you would redirect to login page
+                // window.location.href = '/login';
+            }
+        });
+        
+        // Toast notification function
+        function showToast(message = 'Tindakan berhasil!') {
+            const toast = document.getElementById('toast');
+            const toastText = toast.querySelector('p');
+            toastText.textContent = message;
+            
+            // Show toast
+            toast.classList.remove('translate-y-24');
+            
+            // Hide toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-y-24');
+            }, 3000);
+        }
+        
+        // Sample data for demonstration
+        const sampleArticles = [
+            { id: 1, title: "Pembangunan MRT Fase 3 Dimulai", category: "Nasional", author: "Budi Santoso", date: "26 Okt 2023", status: "Terbit", views: "12.5k" },
+            { id: 2, title: "Timnas Indonesia Masuk Final Piala Asia", category: "Olahraga", author: "Andi Wijaya", date: "25 Okt 2023", status: "Terbit", views: "45.2k" },
+            { id: 3, title: "Resesi Ekonomi Global 2024", category: "Ekonomi", author: "Siti Rahma", date: "24 Okt 2023", status: "Draft", views: "-" },
+            { id: 4, title: "Review iPhone 15 Pro Max", category: "Teknologi", author: "Dedi Corbuzier", date: "24 Okt 2023", status: "Terbit", views: "8.9k" },
+            { id: 5, title: "Resep Rendang Daging Sapi Empuk", category: "Gaya Hidup", author: "Rina Masak", date: "23 Okt 2023", status: "Arsip", views: "5.1k" },
+        ];
+        
+        const samplePendingArticles = [
+            { id: 101, title: "Opini: Mengapa Transportasi Umum Itu Penting", category: "Opini", author: "WargaSipil_01", date: "Baru saja", status: "Menunggu", excerpt: "Kemacetan di Jakarta sudah tidak bisa ditolerir lagi..." },
+            { id: 102, title: "Wisata Tersembunyi di Banyuwangi", category: "Travel", author: "JalanJalanYuk", date: "1 Jam lalu", status: "Menunggu", excerpt: "Banyuwangi menyimpan sejuta pesona yang belum banyak diketahui..." },
+            { id: 103, title: "Resep Seblak Viral Kekinian", category: "Kuliner", author: "ChefRumahan", date: "3 Jam lalu", status: "Menunggu", excerpt: "Siapa yang tidak suka seblak? Berikut adalah resep rahasianya..." },
+        ];
+        
+        const sampleUsers = [
+            { id: 1, name: "Admin Utama", email: "admin@dailiriz.id", role: "Super Admin", status: "Aktif", avatar: "AU" },
+            { id: 2, name: "Siti Rahma", email: "siti@dailiriz.id", role: "Editor", status: "Aktif", avatar: "SR" },
+            { id: 3, name: "Budi Santoso", email: "budi@dailiriz.id", role: "Jurnalis", status: "Cuti", avatar: "BS" },
+            { id: 4, name: "John Doe", email: "john@gmail.com", role: "Subscriber", status: "Nonaktif", avatar: "JD" },
+            { id: 5, name: "Sarah Smith", email: "sarah@yahoo.com", role: "Subscriber", status: "Aktif", avatar: "SS" },
+        ];
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set today's date in sidebar or header if needed
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date();
+            
+            // Set initial active state
+            document.querySelector('.sidebar-menu-item[data-tab="dashboard"]').classList.add('active');
+        });
+    </script>
+</body>
+</html>
