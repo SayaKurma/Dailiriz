@@ -1,0 +1,65 @@
+{
+  "breaking_news": "Pasar Saham Jakarta Menguat di Penutupan Sesi I • Festival Batik Nusantara Digelar Pekan Ini • Peluncuran Satelit Baru Indonesia Sukses Dilakukan",
+  
+  "featured_article": {
+    "id": "001",
+    "category": "UTAMA",
+    "title": "Wajah Baru Ibu Kota: Transformasi Infrastruktur Hijau",
+    "description": "Pembangunan tata kota yang berkelanjutan menjadi fokus utama dalam pengembangan wilayah metropolitan baru, mengintegrasikan teknologi dan alam.",
+    "image": "https://images.unsplash.com/photo-1532967756847-93f341cb15a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
+    "time_ago": "2 Jam yang lalu",
+    "full_content": "Jakarta, 1 Januari 2024 - Pemerintah Kota Jakarta meluncurkan program transformasi infrastruktur hijau yang ambisius. Program ini bertujuan mengubah wajah ibu kota menjadi kota yang lebih berkelanjutan dan ramah lingkungan. Dalam lima tahun ke depan, akan dibangun lebih dari 100 hektar ruang terbuka hijau, sistem transportasi umum terintegrasi, dan penerapan teknologi smart city untuk mengelola energi dan air secara efisien.\n\nGubernur Jakarta, dalam konferensi pers hari ini, menyatakan bahwa program ini merupakan bagian dari visi Jakarta 2030. \"Kami berkomitmen menciptakan kota yang tidak hanya maju secara ekonomi, tetapi juga sehat dan nyaman untuk ditinggali,\" ujarnya.\n\nTransformasi ini meliputi pembangunan taman vertikal di gedung-gedung perkantoran, sistem daur ulang air terpadu, dan pengembangan jaringan sepeda yang terintegrasi dengan transportasi umum. Para ahli tata kota dari berbagai universitas ternama dilibatkan dalam perencanaan proyek ini.\n\nProgram ini juga mendapat dukungan dari sektor swasta, dengan beberapa perusahaan besar berkomitmen mengalokasikan dana CSR untuk mendukung pembangunan infrastruktur hijau. Diperkirakan proyek ini akan menciptakan lebih dari 10.000 lapangan kerja baru di sektor konstruksi dan teknologi hijau."
+  },
+  
+  "popular_articles": [
+    {
+      "id": "002",
+      "category": "Teknologi",
+      "title": "Startup Lokal Raih Pendanaan Seri B",
+      "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      "time_ago": "5 Jam yang lalu"
+    },
+    {
+      "id": "003",
+      "category": "Kuliner",
+      "title": "5 Kuliner Legendaris Wajib Coba",
+      "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+      "time_ago": "8 Jam yang lalu"
+    }
+  ],
+  
+  "latest_news": [
+    {
+      "id": "004",
+      "category": "Seni & Budaya",
+      "title": "Pameran Seni Rupa Kontemporer Dibuka",
+      "description": "Para seniman muda menampilkan karya yang menggabungkan elemen tradisional dengan digital.",
+      "image": "https://images.unsplash.com/photo-1461301214746-1e790926d323?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      "full_content": "Pameran seni rupa kontemporer 'Crossroads' resmi dibuka di Galeri Nasional. Menampilkan 50 karya dari 30 seniman muda Indonesia yang menggabungkan teknik tradisional dengan teknologi digital.\n\nKurator pameran, Sari Dewi, menjelaskan bahwa tema pameran adalah dialog antara masa lalu dan masa depan. \"Kami ingin menunjukkan bahwa seni tradisional tidak bertentangan dengan teknologi, justru bisa saling memperkaya,\" katanya.\n\nSalah satu karya yang menarik perhatian adalah instalasi interaktif yang menggunakan sensor gerak dan proyeksi hologram untuk menampilkan motif batik yang berubah-ubah sesuai dengan gerakan pengunjung. Pameran akan berlangsung selama tiga minggu dan terbuka untuk umum."
+    },
+    {
+      "id": "005",
+      "category": "Lingkungan",
+      "title": "Inisiatif Penanaman Sejuta Pohon",
+      "description": "Komunitas lokal bekerja sama dengan pemerintah untuk menghijaukan kembali lahan kritis.",
+      "image": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      "full_content": "Gerakan 'Sejuta Pohon untuk Indonesia' mencapai target lebih cepat dari perkiraan. Dalam kurun waktu enam bulan, sudah terkumpul 1,2 juta bibit pohon yang akan ditanam di berbagai daerah kritis.\n\nKoordinator gerakan, Ahmad Fauzi, menyatakan bahwa antusiasme masyarakat luar biasa. \"Kami menerima donasi dan sukarelawan dari berbagai kalangan, mulai dari pelajar hingga perusahaan,\" ujarnya.\n\nProgram ini fokus pada penanaman pohon endemik di daerah rawan erosi dan banjir. Setiap pohon yang ditanam akan dilengkapi dengan kode QR yang memungkinkan donatur melacak pertumbuhan pohon mereka secara online.\n\nPemerintah daerah memberikan dukungan penuh dengan menyediakan lahan dan bantuan teknis. Target selanjutnya adalah menanam 5 juta pohon dalam dua tahun ke depan."
+    },
+    {
+      "id": "006",
+      "category": "Bisnis",
+      "title": "UMKM Digital Meningkat Pesat",
+      "description": "Transformasi digital membantu pelaku usaha kecil menjangkau pasar internasional.",
+      "image": "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      "full_content": "Kementerian Koperasi dan UKM mencatat peningkatan signifikan dalam adopsi teknologi digital oleh pelaku UMKM. Dalam setahun terakhir, lebih dari 500.000 UMKM telah beralih ke platform digital.\n\n\"Transformasi digital bukan lagi pilihan, tapi kebutuhan,\" tegas Menteri Koperasi dan UKM dalam acara peluncuran program 'UMKM Go Digital'. Program ini memberikan pelatihan dan akses kepada platform e-commerce bagi pelaku usaha kecil.\n\nSalah satu sukses story datang dari Batik Sari, usaha keluarga dari Solo yang sekarang mengekspor ke 15 negara setelah bergabung dengan platform e-commerce internasional. \"Pendapatan kami meningkat 300% dalam setahun,\" kata pemiliknya, Sari Wulandari.\n\nPemerintah menargetkan 10 juta UMKM terdigitalisasi dalam tiga tahun ke depan, dengan fokus pada sektor kreatif, kuliner, dan kerajinan."
+    },
+    {
+      "id": "007",
+      "category": "Olahraga",
+      "title": "Persiapan Timnas Menuju Piala Asia",
+      "description": "Latihan intensif dilakukan untuk memaksimalkan performa para atlet di ajang bergengsi.",
+      "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      "full_content": "Tim nasional sepak bola Indonesia memasuki fase persiapan intensif menyambut Piala Asia 2024. Pelatih Shin Tae-yong menggelar pemusatan latihan di Bali dengan fokus pada fisik dan taktik.\n\n\"Kami punya target ambisius untuk lolos dari fase grup,\" ujar Shin dalam konferensi pers. Timnas akan menjalani tiga laga uji coba melawan tim-tim Asia yang juga akan tampil di Piala Asia.\n\nPemain andalan seperti Egy Maulana Vikri dan Witan Sulaeman menunjukkan performa yang terus meningkat. \"Kami semua termotivasi untuk membuat bangsa bangga,\" kata Egy.\n\nPSSI juga menyiapkan tim pendukung yang lengkap, termasuk ahli gizi, psikolog olahraga, dan analis data untuk memaksimalkan persiapan. Dukungan dari suporter juga terus mengalir dengan tagar #GarudaAsia2024 trending di media sosial."
+    }
+  ]
+}
