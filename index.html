@@ -1,392 +1,418 @@
-<!DOCTYPE html>  <html lang="id">  
+<!DOCTYPE html>
+<html lang="id">  
 <head>  
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <title>Dailiriz - Berita Terkini</title>  <!-- Tailwind CSS -->  
-<script src="https://cdn.tailwindcss.com"></script>  
-  
-<!-- Google Fonts -->  
-<link rel="preconnect" href="https://fonts.googleapis.com">  
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">  
-  
-<!-- Lucide Icons -->  
-<script src="https://unpkg.com/lucide@latest"></script>  
+    <title>Dailiriz - Berita Terkini</title>  
+    <!-- Tailwind CSS -->  
+    <script src="https://cdn.tailwindcss.com"></script>  
+    
+    <!-- Google Fonts -->  
+    <link rel="preconnect" href="https://fonts.googleapis.com">  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">  
+    
+    <!-- Lucide Icons -->  
+    <script src="https://unpkg.com/lucide@latest"></script>  
 
-<script>  
-    tailwind.config = {  
-        theme: {  
-            extend: {  
-                fontFamily: {  
-                    sans: ['Inter', 'sans-serif'],  
-                    serif: ['Playfair Display', 'serif'],  
-                },  
-                colors: {  
-                    gold: {  
-                        400: '#FFD700',  
-                        500: '#DAA520',  
+    <script>  
+        tailwind.config = {  
+            theme: {  
+                extend: {  
+                    fontFamily: {  
+                        sans: ['Inter', 'sans-serif'],  
+                        serif: ['Playfair Display', 'serif'],  
+                    },  
+                    colors: {  
+                        gold: {  
+                            400: '#FFD700',  
+                            500: '#DAA520',  
+                        }  
                     }  
                 }  
             }  
         }  
-    }  
-</script>  
-  
-<style>  
-    /* Custom Scrollbar */  
-    ::-webkit-scrollbar {  
-        width: 8px;  
-    }  
-    ::-webkit-scrollbar-track {  
-        background: #f1f1f1;  
-    }  
-    ::-webkit-scrollbar-thumb {  
-        background: #c53030;  
-        border-radius: 4px;  
-    }  
-    ::-webkit-scrollbar-thumb:hover {  
-        background: #9b2c2c;  
-    }  
-      
-    .image-hover-zoom {  
-        overflow: hidden;  
-    }  
-    .image-hover-zoom img {  
-        transition: transform 0.5s ease;  
-    }  
-    .image-hover-zoom:hover img {  
-        transform: scale(1.05);  
-    }  
-</style>
+    </script>  
+    
+    <style>  
+        /* Custom Scrollbar */  
+        ::-webkit-scrollbar {  
+            width: 8px;  
+        }  
+        ::-webkit-scrollbar-track {  
+            background: #f1f1f1;  
+        }  
+        ::-webkit-scrollbar-thumb {  
+            background: #c53030;  
+            border-radius: 4px;  
+        }  
+        ::-webkit-scrollbar-thumb:hover {  
+            background: #9b2c2c;  
+        }  
+          
+        .image-hover-zoom {  
+            overflow: hidden;  
+        }  
+        .image-hover-zoom img {  
+            transition: transform 0.5s ease;  
+        }  
+        .image-hover-zoom:hover img {  
+            transform: scale(1.05);  
+        }  
 
+        .line-clamp-2 {  
+            display: -webkit-box;  
+            -webkit-line-clamp: 2;  
+            -webkit-box-orient: vertical;  
+            overflow: hidden;  
+        }  
+
+        .line-clamp-3 {  
+            display: -webkit-box;  
+            -webkit-line-clamp: 3;  
+            -webkit-box-orient: vertical;  
+            overflow: hidden;  
+        }  
+    </style>  
 </head>  
-<body class="bg-stone-50 text-slate-800 flex flex-col min-h-screen">  <!-- Top Bar (Date & Socials) -->  
-<div class="bg-slate-900 text-slate-300 py-1 text-xs">  
-    <div class="container mx-auto px-4 flex justify-between items-center">  
-        <span id="current-date">Senin, 1 Januari 2024</span>  
-        <div class="flex gap-4">  
-            <a href="#" class="hover:text-white">Edisi Digital</a>  
-            <a href="#" class="hover:text-white">Langganan</a>  
-        </div>  
-    </div>  
-</div>  
-
-<!-- Header with Red-Gold Gradient -->  
-<header class="bg-gradient-to-r from-red-900 via-red-600 to-amber-400 shadow-lg sticky top-0 z-50">  
-    <div class="container mx-auto px-4">  
-        <div class="flex justify-between items-center py-4">  
-            <!-- Logo -->  
-            <div class="flex items-center gap-2">  
-                <i data-lucide="newspaper" class="text-white w-8 h-8"></i>  
-                <h1 class="font-serif text-2xl md:text-3xl font-bold text-white tracking-wide">  
-                    Daili<span class="text-amber-200 italic">Riz</span>  
-                </h1>  
-            </div>  
-
-            <!-- Desktop Nav -->  
-            <nav class="hidden md:flex space-x-8 text-white font-medium text-sm tracking-wider">  
-                <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">NASIONAL</a>  
-                <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">EKONOMI</a>  
-                <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">TEKNOLOGI</a>  
-                <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">GAYA HIDUP</a>  
-                <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">OPINI</a>  
-            </nav>  
-
-            <!-- Search & Mobile Menu -->  
-            <div class="flex items-center gap-4">  
-                <button class="text-white hover:text-amber-200 transition">  
-                    <i data-lucide="search" class="w-5 h-5"></i>  
-                </button>  
-                <button id="mobile-menu-btn" class="md:hidden text-white">  
-                    <i data-lucide="menu" class="w-6 h-6"></i>  
-                </button>  
+<body class="bg-stone-50 text-slate-800 flex flex-col min-h-screen">  
+    <!-- Top Bar (Date & Socials) -->  
+    <div class="bg-slate-900 text-slate-300 py-1 text-xs">  
+        <div class="container mx-auto px-4 flex justify-between items-center">  
+            <span id="current-date">Senin, 1 Januari 2024</span>  
+            <div class="flex gap-4">  
+                <a href="#" class="hover:text-white">Edisi Digital</a>  
+                <a href="#" class="hover:text-white">Langganan</a>  
             </div>  
         </div>  
     </div>  
-      
-    <!-- Mobile Menu (Hidden by default) -->  
-    <div id="mobile-menu" class="hidden md:hidden bg-red-900 border-t border-red-700">  
-        <div class="flex flex-col p-4 space-y-3 text-white font-medium">  
-            <a href="#" class="hover:text-amber-300">Nasional</a>  
-            <a href="#" class="hover:text-amber-300">Ekonomi</a>  
-            <a href="#" class="hover:text-amber-300">Teknologi</a>  
-            <a href="#" class="hover:text-amber-300">Gaya Hidup</a>  
-            <a href="#" class="hover:text-amber-300">Opini</a>  
+
+    <!-- Header with Red-Gold Gradient -->  
+    <header class="bg-gradient-to-r from-red-900 via-red-600 to-amber-400 shadow-lg sticky top-0 z-50">  
+        <div class="container mx-auto px-4">  
+            <div class="flex justify-between items-center py-4">  
+                <!-- Logo -->  
+                <div class="flex items-center gap-2">  
+                    <i data-lucide="newspaper" class="text-white w-8 h-8"></i>  
+                    <h1 class="font-serif text-2xl md:text-3xl font-bold text-white tracking-wide">  
+                        Daili<span class="text-amber-200 italic">Riz</span>  
+                    </h1>  
+                </div>  
+
+                <!-- Desktop Nav -->  
+                <nav class="hidden md:flex space-x-8 text-white font-medium text-sm tracking-wider">  
+                    <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">NASIONAL</a>  
+                    <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">EKONOMI</a>  
+                    <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">TEKNOLOGI</a>  
+                    <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">GAYA HIDUP</a>  
+                    <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">OPINI</a>  
+                </nav>  
+
+                <!-- Search & Mobile Menu -->  
+                <div class="flex items-center gap-4">  
+                    <button class="text-white hover:text-amber-200 transition">  
+                        <i data-lucide="search" class="w-5 h-5"></i>  
+                    </button>  
+                    <button id="mobile-menu-btn" class="md:hidden text-white">  
+                        <i data-lucide="menu" class="w-6 h-6"></i>  
+                    </button>  
+                </div>  
+            </div>  
         </div>  
-    </div>  
-</header>  
+          
+        <!-- Mobile Menu (Hidden by default) -->  
+        <div id="mobile-menu" class="hidden md:hidden bg-red-900 border-t border-red-700">  
+            <div class="flex flex-col p-4 space-y-3 text-white font-medium">  
+                <a href="#" class="hover:text-amber-300">Nasional</a>  
+                <a href="#" class="hover:text-amber-300">Ekonomi</a>  
+                <a href="#" class="hover:text-amber-300">Teknologi</a>  
+                <a href="#" class="hover:text-amber-300">Gaya Hidup</a>  
+                <a href="#" class="hover:text-amber-300">Opini</a>  
+            </div>  
+        </div>  
+    </header>  
 
-<!-- Main Content -->  
-<main class="container mx-auto px-4 py-8 flex-grow">  
-      
-    <!-- Breaking News Ticker -->  
-    <div class="flex items-center gap-3 mb-8 bg-white p-3 rounded-lg shadow-sm border-l-4 border-red-600">  
-        <span class="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Terkini</span>  
-        <marquee class="text-sm font-medium text-slate-700">  
-            Pasar Saham Jakarta Menguat di Penutupan Sesi I  •  Festival Batik Nusantara Digelar Pekan Ini  •  Peluncuran Satelit Baru Indonesia Sukses Dilakukan  
-        </marquee>  
-    </div>  
+    <!-- Main Content -->  
+    <main class="container mx-auto px-4 py-8 flex-grow">  
+          
+        <!-- Breaking News Ticker -->  
+        <div class="flex items-center gap-3 mb-8 bg-white p-3 rounded-lg shadow-sm border-l-4 border-red-600">  
+            <span class="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Terkini</span>  
+            <marquee class="text-sm font-medium text-slate-700" id="breaking-news-ticker">  
+                <!-- Data akan diisi oleh JavaScript -->  
+            </marquee>  
+        </div>  
 
-    <!-- Hero Section -->  
-    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">  
-        <!-- Main Headline -->  
-        <div class="lg:col-span-8 group cursor-pointer">  
-            <div class="relative h-[400px] md:h-[500px] rounded-xl overflow-hidden shadow-xl image-hover-zoom">  
-                <img src="https://images.unsplash.com/photo-1532967756847-93f341cb15a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"   
-                     alt="Jakarta Cityscape"   
-                     class="w-full h-full object-cover">  
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>  
-                <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full">  
-                    <span class="bg-amber-400 text-red-900 text-xs font-bold px-2 py-1 mb-3 inline-block rounded">UTAMA</span>  
-                    <h2 class="font-serif text-3xl md:text-5xl font-bold text-white leading-tight mb-3 group-hover:text-amber-200 transition-colors">  
-                        Wajah Baru Ibu Kota: Transformasi Infrastruktur Hijau  
-                    </h2>  
-                    <p class="text-slate-200 text-sm md:text-base line-clamp-2 max-w-2xl">  
-                        Pembangunan tata kota yang berkelanjutan menjadi fokus utama dalam pengembangan wilayah metropolitan baru, mengintegrasikan teknologi dan alam.  
-                    </p>  
-                    <div class="mt-4 text-slate-400 text-xs flex items-center gap-2">  
-                        <i data-lucide="clock" class="w-3 h-3"></i> 2 Jam yang lalu  
+        <!-- Hero Section -->  
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">  
+            <!-- Main Headline -->  
+            <div id="featured-article" class="lg:col-span-8 group cursor-pointer">  
+                <!-- Data akan diisi oleh JavaScript -->  
+            </div>  
+
+            <!-- Side Articles (Trending) -->  
+            <div class="lg:col-span-4 flex flex-col gap-6">  
+                <h3 class="font-serif text-xl font-bold border-b-2 border-red-600 pb-2 inline-block w-full text-red-800">  
+                    Terpopuler  
+                </h3>  
+                  
+                <div id="popular-articles">  
+                    <!-- Data akan diisi oleh JavaScript -->  
+                </div>  
+                  
+                <!-- Subscribe Box -->  
+                <div class="bg-slate-100 p-6 rounded-xl border border-slate-200 mt-auto">  
+                    <h4 class="font-serif font-bold text-lg mb-2">Buletin Harian</h4>  
+                    <p class="text-sm text-slate-600 mb-4">Dapatkan berita terkini langsung di email Anda.</p>  
+                    <form onsubmit="event.preventDefault(); subscribe();" class="flex flex-col gap-2">  
+                        <input type="email" placeholder="Email Anda" class="px-4 py-2 rounded border border-slate-300 focus:outline-none focus:border-red-500 text-sm">  
+                        <button type="submit" class="bg-slate-900 text-white py-2 rounded font-medium hover:bg-red-700 transition text-sm">Langganan</button>  
+                    </form>  
+                </div>  
+            </div>  
+        </section>  
+
+        <!-- Latest News Grid -->  
+        <section>  
+            <div class="flex justify-between items-end mb-6 border-b border-slate-200 pb-2">  
+                <h3 class="font-serif text-2xl font-bold text-slate-800">Berita Terbaru</h3>  
+                <a href="#" class="text-sm font-medium text-red-600 hover:text-red-800 flex items-center gap-1">  
+                    Lihat Semua <i data-lucide="arrow-right" class="w-4 h-4"></i>  
+                </a>  
+            </div>  
+
+            <div id="latest-news" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">  
+                <!-- Data akan diisi oleh JavaScript -->  
+            </div>  
+        </section>  
+
+        <!-- Opinion / Quote Section -->  
+        <section class="mt-16 mb-12 bg-stone-100 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden">  
+            <div class="absolute top-0 left-0 text-9xl text-stone-200 font-serif opacity-50 -translate-y-8 translate-x-4">"</div>  
+            <div class="relative z-10 max-w-3xl mx-auto">  
+                <h3 class="font-serif text-2xl md:text-3xl italic text-slate-800 mb-6">  
+                    "Setiap berita yang Anda baca di sini adalah janji kami untuk menjaga integritas informasi demi masyarakat yang cerdas dan berdaya."  
+                </h3>  
+                <div class="flex items-center justify-center gap-4">  
+                    <img src="https://ui-avatars.com/api/?name=Editor+Chief&background=random" class="w-12 h-12 rounded-full border-2 border-amber-400" alt="Editor">  
+                    <div class="text-left">  
+                        <p class="font-bold text-slate-900">Muhammad Alfaridzi</p>  
+                        <p class="text-xs text-slate-500 uppercase tracking-wide">Pemimpin Redaksi</p>  
                     </div>  
                 </div>  
             </div>  
-        </div>  
+        </section>  
+    </main>  
 
-        <!-- Side Articles (Trending) -->  
-        <div class="lg:col-span-4 flex flex-col gap-6">  
-            <h3 class="font-serif text-xl font-bold border-b-2 border-red-600 pb-2 inline-block w-full text-red-800">  
-                Terpopuler  
-            </h3>  
-              
-            <!-- Side Item 1 -->  
-            <article class="flex gap-4 group cursor-pointer">  
-                <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden image-hover-zoom">  
-                    <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover" alt="Tech">  
+    <!-- Footer dengan gradient merah-emas -->  
+    <footer class="bg-gradient-to-r from-red-900 via-red-600 to-amber-400 text-white pt-16 pb-8 mt-auto">  
+        <div class="container mx-auto px-4">  
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">  
+                  
+                <!-- Brand Column -->  
+                <div class="space-y-4">  
+                    <div class="flex items-center gap-2 mb-4">  
+                        <i data-lucide="newspaper" class="text-white w-8 h-8"></i>  
+                        <h2 class="font-serif text-2xl font-bold tracking-wide">  
+                            Daili<span class="text-amber-200 italic">Riz</span>  
+                        </h2>  
+                    </div>  
+                    <p class="text-red-100 text-sm leading-relaxed">  
+                        Menyajikan berita terpercaya, tajam, dan berimbang dari seluruh pelosok negeri untuk membangun wawasan bangsa.  
+                    </p>  
+                    <div class="flex gap-4 mt-4">  
+                        <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>  
+                        <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="twitter" class="w-4 h-4"></i></a>  
+                        <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="instagram" class="w-4 h-4"></i></a>  
+                    </div>  
                 </div>  
-                <div class="flex flex-col justify-center">  
-                    <span class="text-xs font-bold text-red-600 uppercase mb-1">Teknologi</span>  
-                    <h4 class="font-serif font-bold text-lg leading-tight group-hover:text-red-700 transition">Startup Lokal Raih Pendanaan Seri B</h4>  
-                    <span class="text-xs text-slate-500 mt-2">5 Jam yang lalu</span>  
-                </div>  
-            </article>  
 
-            <!-- Side Item 2 -->  
-            <article class="flex gap-4 group cursor-pointer">  
-                <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden image-hover-zoom">  
-                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover" alt="Food">  
+                <!-- Links -->  
+                <div>  
+                    <h3 class="font-bold text-lg mb-4 text-amber-200 font-serif">Kategori</h3>  
+                    <ul class="space-y-2 text-sm text-red-50">  
+                        <li><a href="#" class="hover:text-white transition">Politik & Hukum</a></li>  
+                        <li><a href="#" class="hover:text-white transition">Ekonomi Bisnis</a></li>  
+                        <li><a href="#" class="hover:text-white transition">Olahraga</a></li>  
+                        <li><a href="#" class="hover:text-white transition">Sains & Tekno</a></li>  
+                        <li><a href="#" class="hover:text-white transition">Otomotif</a></li>  
+                    </ul>  
                 </div>  
-                <div class="flex flex-col justify-center">  
-                    <span class="text-xs font-bold text-red-600 uppercase mb-1">Kuliner</span>  
-                    <h4 class="font-serif font-bold text-lg leading-tight group-hover:text-red-700 transition">5 Kuliner Legendaris Wajib Coba</h4>  
-                    <span class="text-xs text-slate-500 mt-2">8 Jam yang lalu</span>  
+
+                <!-- Links -->  
+                <div>  
+                    <h3 class="font-bold text-lg mb-4 text-amber-200 font-serif">Perusahaan</h3>  
+                    <ul class="space-y-2 text-sm text-red-50">  
+                        <li><a href="#" class="hover:text-white transition">Tentang Kami</a></li>  
+                        <li><a href="#" class="hover:text-white transition">Redaksi</a></li>  
+                        <li><a href="#" class="hover:text-white transition">Pedoman Media Siber</a></li>  
+                        <li><a href="#" class="hover:text-white transition">Karir</a></li>  
+                        <li><a href="#" class="hover:text-white transition">Kontak</a></li>  
+                    </ul>  
                 </div>  
-            </article>  
-              
-            <!-- Subscribe Box -->  
-            <div class="bg-slate-100 p-6 rounded-xl border border-slate-200 mt-auto">  
-                <h4 class="font-serif font-bold text-lg mb-2">Buletin Harian</h4>  
-                <p class="text-sm text-slate-600 mb-4">Dapatkan berita terkini langsung di email Anda.</p>  
-                <form onsubmit="event.preventDefault(); subscribe();" class="flex flex-col gap-2">  
-                    <input type="email" placeholder="Email Anda" class="px-4 py-2 rounded border border-slate-300 focus:outline-none focus:border-red-500 text-sm">  
-                    <button type="submit" class="bg-slate-900 text-white py-2 rounded font-medium hover:bg-red-700 transition text-sm">Langganan</button>  
-                </form>  
+
+                <!-- Contact -->  
+                <div>  
+                    <h3 class="font-bold text-lg mb-4 text-amber-200 font-serif">Hubungi Kami</h3>  
+                    <ul class="space-y-3 text-sm text-red-50">  
+                        <li class="flex items-start gap-3">  
+                            <i data-lucide="map-pin" class="w-5 h-5 mt-0.5 text-amber-300"></i>  
+                            <span>Jl. Perintis Kemerdekaan No.KM.10,<br>Tamalanrea Indah, Kec. Tamalanrea,<br>Kota Makassar, Sulawesi Selatan 90245</span>  
+                        </li>  
+                        <li class="flex items-center gap-3">  
+                            <i data-lucide="phone" class="w-5 h-5 text-amber-300"></i>  
+                            <span>+62 123 456 7890</span>  
+                        </li>  
+                        <li class="flex items-center gap-3">  
+                            <i data-lucide="mail" class="w-5 h-5 text-amber-300"></i>  
+                            <span>redaksi@dailiriz.id</span>  
+                        </li>  
+                    </ul>  
+                </div>  
             </div>  
-        </div>  
-    </section>  
 
-    <!-- Latest News Grid -->  
-    <section>  
-        <div class="flex justify-between items-end mb-6 border-b border-slate-200 pb-2">  
-            <h3 class="font-serif text-2xl font-bold text-slate-800">Berita Terbaru</h3>  
-            <a href="#" class="text-sm font-medium text-red-600 hover:text-red-800 flex items-center gap-1">  
-                Lihat Semua <i data-lucide="arrow-right" class="w-4 h-4"></i>  
-            </a>  
-        </div>  
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">  
-            <!-- Card 1 -->  
-            <article class="bg-white rounded-lg shadow-sm hover:shadow-lg transition duration-300 overflow-hidden group">  
-                <div class="h-48 overflow-hidden">  
-                    <img src="https://images.unsplash.com/photo-1461301214746-1e790926d323?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500" alt="Art">  
-                </div>  
-                <div class="p-4">  
-                    <span class="text-xs font-bold text-amber-600 uppercase">Seni & Budaya</span>  
-                    <h4 class="font-serif font-bold text-lg mt-2 mb-2 leading-snug group-hover:text-red-700">Pameran Seni Rupa Kontemporer Dibuka</h4>  
-                    <p class="text-slate-600 text-sm line-clamp-3">Para seniman muda menampilkan karya yang menggabungkan elemen tradisional dengan digital.</p>  
-                </div>  
-            </article>  
-
-            <!-- Card 2 -->  
-            <article class="bg-white rounded-lg shadow-sm hover:shadow-lg transition duration-300 overflow-hidden group">  
-                <div class="h-48 overflow-hidden">  
-                    <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500" alt="Nature">  
-                </div>  
-                <div class="p-4">  
-                    <span class="text-xs font-bold text-green-600 uppercase">Lingkungan</span>  
-                    <h4 class="font-serif font-bold text-lg mt-2 mb-2 leading-snug group-hover:text-red-700">Inisiatif Penanaman Sejuta Pohon</h4>  
-                    <p class="text-slate-600 text-sm line-clamp-3">Komunitas lokal bekerja sama dengan pemerintah untuk menghijaukan kembali lahan kritis.</p>  
-                </div>  
-            </article>  
-
-            <!-- Card 3 -->  
-            <article class="bg-white rounded-lg shadow-sm hover:shadow-lg transition duration-300 overflow-hidden group">  
-                <div class="h-48 overflow-hidden">  
-                    <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500" alt="Economy">  
-                </div>  
-                <div class="p-4">  
-                    <span class="text-xs font-bold text-blue-600 uppercase">Bisnis</span>  
-                    <h4 class="font-serif font-bold text-lg mt-2 mb-2 leading-snug group-hover:text-red-700">UMKM Digital Meningkat Pesat</h4>  
-                    <p class="text-slate-600 text-sm line-clamp-3">Transformasi digital membantu pelaku usaha kecil menjangkau pasar internasional.</p>  
-                </div>  
-            </article>  
-
-            <!-- Card 4 -->  
-            <article class="bg-white rounded-lg shadow-sm hover:shadow-lg transition duration-300 overflow-hidden group">  
-                <div class="h-48 overflow-hidden">  
-                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500" alt="Sport">  
-                </div>  
-                <div class="p-4">  
-                    <span class="text-xs font-bold text-red-600 uppercase">Olahraga</span>  
-                    <h4 class="font-serif font-bold text-lg mt-2 mb-2 leading-snug group-hover:text-red-700">Persiapan Timnas Menuju Piala Asia</h4>  
-                    <p class="text-slate-600 text-sm line-clamp-3">Latihan intensif dilakukan untuk memaksimalkan performa para atlet di ajang bergengsi.</p>  
-                </div>  
-            </article>  
-        </div>  
-    </section>  
-
-    <!-- Opinion / Quote Section -->  
-    <section class="mt-16 mb-12 bg-stone-100 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden">  
-        <div class="absolute top-0 left-0 text-9xl text-stone-200 font-serif opacity-50 -translate-y-8 translate-x-4">"</div>  
-        <div class="relative z-10 max-w-3xl mx-auto">  
-            <h3 class="font-serif text-2xl md:text-3xl italic text-slate-800 mb-6">  
-                "Setiap berita yang Anda baca di sini adalah janji kami untuk menjaga integritas informasi demi masyarakat yang cerdas dan berdaya."  
-            </h3>  
-            <div class="flex items-center justify-center gap-4">  
-                <img src="https://ui-avatars.com/api/?name=Editor+Chief&background=random" class="w-12 h-12 rounded-full border-2 border-amber-400" alt="Editor">  
-                <div class="text-left">  
-                    <p class="font-bold text-slate-900">Muhammad Alfaridzi</p>  
-                    <p class="text-xs text-slate-500 uppercase tracking-wide">Pemimpin Redaksi</p>  
+            <div class="border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-red-100">  
+                <p>&copy; 2025 Dailiriz. Hak Cipta Dilindungi Undang-Undang.</p>  
+                <div class="flex gap-6 mt-4 md:mt-0">  
+                    <a href="#" class="hover:text-white">Kebijakan Privasi</a>  
+                    <a href="#" class="hover:text-white">Syarat & Ketentuan</a>  
                 </div>  
             </div>  
         </div>  
-    </section>  
-</main>  
+    </footer>  
 
-<!-- Footer with Red-Gold Gradient -->  
-<footer class="bg-gradient-to-r from-red-900 via-red-600 to-amber-400 text-white pt-16 pb-8 mt-auto">  
-    <div class="container mx-auto px-4">  
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">  
-              
-            <!-- Brand Column -->  
-            <div class="space-y-4">  
-                <div class="flex items-center gap-2 mb-4">  
-                    <i data-lucide="newspaper" class="text-white w-8 h-8"></i>  
-                    <h2 class="font-serif text-2xl font-bold tracking-wide">  
-                        Daili<span class="text-amber-200 italic">Riz</span>  
-                    </h2>  
-                </div>  
-                <p class="text-red-100 text-sm leading-relaxed">  
-                    Menyajikan berita terpercaya, tajam, dan berimbang dari seluruh pelosok negeri untuk membangun wawasan bangsa.  
-                </p>  
-                <div class="flex gap-4 mt-4">  
-                    <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>  
-                    <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="twitter" class="w-4 h-4"></i></a>  
-                    <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="instagram" class="w-4 h-4"></i></a>  
-                </div>  
-            </div>  
-
-            <!-- Links -->  
-            <div>  
-                <h3 class="font-bold text-lg mb-4 text-amber-200 font-serif">Kategori</h3>  
-                <ul class="space-y-2 text-sm text-red-50">  
-                    <li><a href="#" class="hover:text-white transition">Politik & Hukum</a></li>  
-                    <li><a href="#" class="hover:text-white transition">Ekonomi Bisnis</a></li>  
-                    <li><a href="#" class="hover:text-white transition">Olahraga</a></li>  
-                    <li><a href="#" class="hover:text-white transition">Sains & Tekno</a></li>  
-                    <li><a href="#" class="hover:text-white transition">Otomotif</a></li>  
-                </ul>  
-            </div>  
-
-            <!-- Links -->  
-            <div>  
-                <h3 class="font-bold text-lg mb-4 text-amber-200 font-serif">Perusahaan</h3>  
-                <ul class="space-y-2 text-sm text-red-50">  
-                    <li><a href="#" class="hover:text-white transition">Tentang Kami</a></li>  
-                    <li><a href="#" class="hover:text-white transition">Redaksi</a></li>  
-                    <li><a href="#" class="hover:text-white transition">Pedoman Media Siber</a></li>  
-                    <li><a href="#" class="hover:text-white transition">Karir</a></li>  
-                    <li><a href="#" class="hover:text-white transition">Kontak</a></li>  
-                </ul>  
-            </div>  
-
-            <!-- Contact -->  
-            <div>  
-                <h3 class="font-bold text-lg mb-4 text-amber-200 font-serif">Hubungi Kami</h3>  
-                <ul class="space-y-3 text-sm text-red-50">  
-                    <li class="flex items-start gap-3">  
-                        <i data-lucide="map-pin" class="w-5 h-5 mt-0.5 text-amber-300"></i>  
-                        <span>Jl. Perintis Kemerdekaan No.KM.10,<br>Tamalanrea Indah, Kec. Tamalanrea,<br>Kota Makassar, Sulawesi Selatan 90245</span>  
-                    </li>  
-                    <li class="flex items-center gap-3">  
-                        <i data-lucide="phone" class="w-5 h-5 text-amber-300"></i>  
-                        <span>+62 123 456 7890</span>  
-                    </li>  
-                    <li class="flex items-center gap-3">  
-                        <i data-lucide="mail" class="w-5 h-5 text-amber-300"></i>  
-                        <span>redaksi@dailiriz.id</span>  
-                    </li>  
-                </ul>  
-            </div>  
-        </div>  
-
-        <div class="border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-red-100">  
-            <p>&copy; 2025 Dailiriz. Hak Cipta Dilindungi Undang-Undang.</p>  
-            <div class="flex gap-6 mt-4 md:mt-0">  
-                <a href="#" class="hover:text-white">Kebijakan Privasi</a>  
-                <a href="#" class="hover:text-white">Syarat & Ketentuan</a>  
-            </div>  
+    <!-- Toast Notification Container -->  
+    <div id="toast" class="fixed bottom-5 right-5 bg-white border-l-4 border-green-500 text-slate-800 px-6 py-4 rounded shadow-2xl transform translate-y-24 transition-transform duration-300 z-50 flex items-center gap-3">  
+        <i data-lucide="check-circle" class="text-green-500"></i>  
+        <div>  
+            <h4 class="font-bold text-sm">Berhasil!</h4>  
+            <p class="text-xs text-slate-600">Terima kasih telah berlangganan.</p>  
         </div>  
     </div>  
-</footer>  
 
-<!-- Toast Notification Container -->  
-<div id="toast" class="fixed bottom-5 right-5 bg-white border-l-4 border-green-500 text-slate-800 px-6 py-4 rounded shadow-2xl transform translate-y-24 transition-transform duration-300 z-50 flex items-center gap-3">  
-    <i data-lucide="check-circle" class="text-green-500"></i>  
-    <div>  
-        <h4 class="font-bold text-sm">Berhasil!</h4>  
-        <p class="text-xs text-slate-600">Terima kasih telah berlangganan.</p>  
-    </div>  
-</div>  
+    <script>  
+        // Initialize Lucide Icons  
+        lucide.createIcons();  
 
-<script>  
-    // Initialize Lucide Icons  
-    lucide.createIcons();  
+        // Mobile Menu Toggle  
+        const btn = document.getElementById('mobile-menu-btn');  
+        const menu = document.getElementById('mobile-menu');  
 
-    // Mobile Menu Toggle  
-    const btn = document.getElementById('mobile-menu-btn');  
-    const menu = document.getElementById('mobile-menu');  
+        btn.addEventListener('click', () => {  
+            menu.classList.toggle('hidden');  
+        });  
 
-    btn.addEventListener('click', () => {  
-        menu.classList.toggle('hidden');  
-    });  
+        // Dynamic Date  
+        const dateElement = document.getElementById('current-date');  
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };  
+        const today = new Date();  
+        dateElement.textContent = today.toLocaleDateString('id-ID', options);  
 
-    // Dynamic Date  
-    const dateElement = document.getElementById('current-date');  
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };  
-    const today = new Date();  
-    dateElement.textContent = today.toLocaleDateString('id-ID', options);  
+        // Subscribe Function (Simulation)  
+        function subscribe() {  
+            const toast = document.getElementById('toast');  
+            // Show toast  
+            toast.classList.remove('translate-y-24');  
+              
+            // Hide toast after 3 seconds  
+            setTimeout(() => {  
+                toast.classList.add('translate-y-24');  
+            }, 3000);  
+        }  
 
-    // Subscribe Function (Simulation)  
-    function subscribe() {  
-        const toast = document.getElementById('toast');  
-        // Show toast  
-        toast.classList.remove('translate-y-24');  
-          
-        // Hide toast after 3 seconds  
-        setTimeout(() => {  
-            toast.classList.add('translate-y-24');  
-        }, 3000);  
-    }  
-</script>
+        // Load News Data from JSON  
+        async function loadNewsData() {  
+            try {  
+                const response = await fetch('data.json');  
+                const data = await response.json();  
+                
+                // Update Breaking News  
+                document.getElementById('breaking-news-ticker').textContent = data.breaking_news;  
+                
+                // Update Featured Article  
+                const featuredArticle = data.featured_article;  
+                document.getElementById('featured-article').innerHTML = `  
+                    <div class="relative h-[400px] md:h-[500px] rounded-xl overflow-hidden shadow-xl image-hover-zoom">  
+                        <img src="${featuredArticle.image}"   
+                             alt="${featuredArticle.title}"   
+                             class="w-full h-full object-cover">  
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>  
+                        <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full">  
+                            <span class="bg-amber-400 text-red-900 text-xs font-bold px-2 py-1 mb-3 inline-block rounded">${featuredArticle.category}</span>  
+                            <h2 class="font-serif text-3xl md:text-5xl font-bold text-white leading-tight mb-3 group-hover:text-amber-200 transition-colors">  
+                                ${featuredArticle.title}  
+                            </h2>  
+                            <p class="text-slate-200 text-sm md:text-base line-clamp-2 max-w-2xl">  
+                                ${featuredArticle.description}  
+                            </p>  
+                            <div class="mt-4 text-slate-400 text-xs flex items-center gap-2">  
+                                <i data-lucide="clock" class="w-3 h-3"></i> ${featuredArticle.time_ago}  
+                            </div>  
+                        </div>  
+                    </div>  
+                `;  
+                
+                // Add click event to featured article  
+                document.getElementById('featured-article').addEventListener('click', () => {  
+                    window.location.href = `article.html?id=${featuredArticle.id}`;  
+                });  
 
+                // Update Popular Articles  
+                const popularArticlesContainer = document.getElementById('popular-articles');  
+                data.popular_articles.forEach(article => {  
+                    const articleElement = document.createElement('article');  
+                    articleElement.className = 'flex gap-4 group cursor-pointer';  
+                    articleElement.innerHTML = `  
+                        <div class="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden image-hover-zoom">  
+                            <img src="${article.image}" class="w-full h-full object-cover" alt="${article.category}">  
+                        </div>  
+                        <div class="flex flex-col justify-center">  
+                            <span class="text-xs font-bold text-red-600 uppercase mb-1">${article.category}</span>  
+                            <h4 class="font-serif font-bold text-lg leading-tight group-hover:text-red-700 transition">${article.title}</h4>  
+                            <span class="text-xs text-slate-500 mt-2">${article.time_ago}</span>  
+                        </div>  
+                    `;  
+                    articleElement.addEventListener('click', () => {  
+                        window.location.href = `article.html?id=${article.id}`;  
+                    });  
+                    popularArticlesContainer.appendChild(articleElement);  
+                });  
+
+                // Update Latest News  
+                const latestNewsContainer = document.getElementById('latest-news');  
+                data.latest_news.forEach(article => {  
+                    const categoryColor = {  
+                        'Seni & Budaya': 'amber-600',  
+                        'Lingkungan': 'green-600',  
+                        'Bisnis': 'blue-600',  
+                        'Olahraga': 'red-600'  
+                    }[article.category] || 'gray-600';  
+
+                    const articleElement = document.createElement('article');  
+                    articleElement.className = 'bg-white rounded-lg shadow-sm hover:shadow-lg transition duration-300 overflow-hidden group';  
+                    articleElement.innerHTML = `  
+                        <div class="h-48 overflow-hidden">  
+                            <img src="${article.image}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500" alt="${article.category}">  
+                        </div>  
+                        <div class="p-4">  
+                            <span class="text-xs font-bold text-${categoryColor} uppercase">${article.category}</span>  
+                            <h4 class="font-serif font-bold text-lg mt-2 mb-2 leading-snug group-hover:text-red-700">${article.title}</h4>  
+                            <p class="text-slate-600 text-sm line-clamp-3">${article.description}</p>  
+                        </div>  
+                    `;  
+                    articleElement.addEventListener('click', () => {  
+                        window.location.href = `article.html?id=${article.id}`;  
+                    });  
+                    latestNewsContainer.appendChild(articleElement);  
+                });  
+
+            } catch (error) {  
+                console.error('Error loading news data:', error);  
+            }  
+        }  
+
+        // Load news data on page load  
+        document.addEventListener('DOMContentLoaded', loadNewsData);  
+    </script>  
 </body>  
 </html>
