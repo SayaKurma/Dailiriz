@@ -16,6 +16,9 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -74,22 +77,19 @@
         }
         
         /* Sidebar mobile animation */
-        @keyframes slide-in {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(0); }
+        .sidebar-mobile {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 280px;
+            z-index: 50;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
         }
         
-        @keyframes slide-out {
-            from { transform: translateX(0); }
-            to { transform: translateX(-100%); }
-        }
-        
-        .sidebar-mobile-in {
-            animation: slide-in 0.3s ease-out;
-        }
-        
-        .sidebar-mobile-out {
-            animation: slide-out 0.3s ease-in;
+        .sidebar-mobile.active {
+            transform: translateX(0);
         }
         
         /* Status badges */
@@ -134,29 +134,32 @@
             -webkit-overflow-scrolling: touch;
         }
         
-        .table-mobile-card {
-            display: none;
+        /* Editor toolbar */
+        .editor-toolbar {
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
         }
         
-        /* Card grid for mobile */
-        .mobile-card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1rem;
+        .editor-toolbar button {
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            color: #4b5563;
+            transition: all 0.2s;
+        }
+        
+        .editor-toolbar button:hover {
+            background: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
         
         /* Hide/show elements based on screen size */
         @media (max-width: 768px) {
             .mobile-hidden {
                 display: none !important;
-            }
-            
-            .mobile-block {
-                display: block !important;
-            }
-            
-            .mobile-flex {
-                display: flex !important;
             }
             
             .desktop-table {
@@ -169,71 +172,6 @@
             
             .table-mobile-card {
                 display: block;
-            }
-            
-            /* Adjust padding for mobile */
-            .mobile-p-4 {
-                padding: 1rem;
-            }
-            
-            .mobile-px-3 {
-                padding-left: 0.75rem;
-                padding-right: 0.75rem;
-            }
-            
-            .mobile-py-2 {
-                padding-top: 0.5rem;
-                padding-bottom: 0.5rem;
-            }
-            
-            /* Adjust text sizes for mobile */
-            .mobile-text-lg {
-                font-size: 1.125rem;
-            }
-            
-            .mobile-text-base {
-                font-size: 1rem;
-            }
-            
-            .mobile-text-sm {
-                font-size: 0.875rem;
-            }
-            
-            .mobile-text-xs {
-                font-size: 0.75rem;
-            }
-            
-            /* Sidebar mobile styles */
-            .sidebar-mobile {
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100vh;
-                width: 280px;
-                z-index: 50;
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-            
-            .sidebar-mobile.active {
-                transform: translateX(0);
-            }
-            
-            /* Main content mobile adjustment */
-            .main-content-mobile {
-                width: 100%;
-                padding-top: 0.5rem;
-            }
-            
-            /* Stats cards mobile */
-            .stats-card-mobile {
-                padding: 1rem;
-            }
-            
-            /* Button mobile styles */
-            .btn-mobile {
-                padding: 0.5rem 0.75rem;
-                font-size: 0.875rem;
             }
             
             /* Table card view for mobile */
@@ -300,11 +238,6 @@
             justify-content: center;
         }
         
-        /* Better tap targets for mobile */
-        .tap-target {
-            padding: 12px;
-        }
-        
         /* Safe area for notched phones */
         .safe-area-top {
             padding-top: env(safe-area-inset-top);
@@ -312,6 +245,34 @@
         
         .safe-area-bottom {
             padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        /* Custom checkbox */
+        .custom-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 1rem;
+            height: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+            background: white;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .custom-checkbox:checked {
+            background-color: #dc2626;
+            border-color: #dc2626;
+        }
+        
+        .custom-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 0.75rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     </style>
 </head>
@@ -360,11 +321,6 @@
                 <span class="truncate">Pengguna</span>
             </a>
             
-            <a href="#" data-tab="analytics" class="sidebar-menu-item flex items-center gap-3 px-3 py-3 md:py-3 rounded-lg text-sm md:text-base transition-colors text-red-100 hover:bg-red-800 hover:text-white">
-                <i data-lucide="bar-chart-3" class="w-5 h-5 flex-shrink-0"></i>
-                <span class="truncate">Analitik</span>
-            </a>
-            
             <a href="#" data-tab="settings" class="sidebar-menu-item flex items-center gap-3 px-3 py-3 md:py-3 rounded-lg text-sm md:text-base transition-colors text-red-100 hover:bg-red-800 hover:text-white">
                 <i data-lucide="settings" class="w-5 h-5 flex-shrink-0"></i>
                 <span class="truncate">Pengaturan</span>
@@ -388,7 +344,7 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col overflow-hidden main-content-mobile">
+    <main class="flex-1 flex flex-col overflow-hidden">
         <!-- Top Navigation Bar -->
         <div class="bg-white border-b border-slate-200 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between shadow-sm safe-area-top">
             <div class="flex items-center gap-3">
@@ -448,7 +404,7 @@
 
                 <!-- Stats Cards - Mobile Grid -->
                 <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
-                    <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all col-span-1 stats-card-mobile">
+                    <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all col-span-1">
                         <div class="flex items-center justify-between mb-3 md:mb-4">
                             <div class="p-2 md:p-3 rounded-lg bg-red-50">
                                 <i data-lucide="eye" class="w-5 h-5 md:w-6 md:h-6 text-red-600"></i>
@@ -459,7 +415,7 @@
                         <p class="text-lg md:text-2xl font-bold text-slate-800">1.2M</p>
                     </div>
                     
-                    <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all col-span-1 stats-card-mobile">
+                    <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all col-span-1">
                         <div class="flex items-center justify-between mb-3 md:mb-4">
                             <div class="p-2 md:p-3 rounded-lg bg-amber-50">
                                 <i data-lucide="file-text" class="w-5 h-5 md:w-6 md:h-6 text-amber-600"></i>
@@ -470,7 +426,7 @@
                         <p class="text-lg md:text-2xl font-bold text-slate-800">142</p>
                     </div>
                     
-                    <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all col-span-1 stats-card-mobile">
+                    <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all col-span-1">
                         <div class="flex items-center justify-between mb-3 md:mb-4">
                             <div class="p-2 md:p-3 rounded-lg bg-blue-50">
                                 <i data-lucide="message-square" class="w-5 h-5 md:w-6 md:h-6 text-blue-600"></i>
@@ -481,7 +437,7 @@
                         <p class="text-lg md:text-2xl font-bold text-slate-800">8,542</p>
                     </div>
                     
-                    <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all col-span-1 stats-card-mobile">
+                    <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition-all col-span-1">
                         <div class="flex items-center justify-between mb-3 md:mb-4">
                             <div class="p-2 md:p-3 rounded-lg bg-green-50">
                                 <i data-lucide="trending-up" class="w-5 h-5 md:w-6 md:h-6 text-green-600"></i>
@@ -490,6 +446,26 @@
                         </div>
                         <h3 class="text-slate-500 text-xs md:text-sm font-medium mb-1">Tren Pembaca</h3>
                         <p class="text-lg md:text-2xl font-bold text-slate-800">89%</p>
+                    </div>
+                </div>
+
+                <!-- Chart and Recent Comments -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="lg:col-span-2 bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200">
+                        <h3 class="text-lg font-bold text-slate-800 mb-6">Analitik Pembaca (Minggu Ini)</h3>
+                        <div class="h-80">
+                            <canvas id="analyticsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200">
+                        <h3 class="text-lg font-bold text-slate-800 mb-6">Komentar Terbaru</h3>
+                        <div class="space-y-6" id="recent-comments">
+                            <!-- Comments will be loaded via JavaScript -->
+                        </div>
+                        <button class="w-full mt-4 py-2 text-sm text-red-600 font-medium hover:bg-red-50 rounded-lg transition-colors">
+                            Lihat Semua Komentar
+                        </button>
                     </div>
                 </div>
 
@@ -514,7 +490,7 @@
                                     <th class="px-4 md:px-6 py-3 md:py-4 text-center">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100">
+                            <tbody id="dashboard-articles-tbody" class="divide-y divide-slate-100">
                                 <!-- Article rows will be loaded via JavaScript -->
                             </tbody>
                         </table>
@@ -530,7 +506,7 @@
                         </a>
                     </div>
                     
-                    <div class="table-mobile-card">
+                    <div id="dashboard-mobile-cards" class="table-mobile-card">
                         <!-- Article cards will be loaded via JavaScript -->
                     </div>
                 </div>
@@ -547,7 +523,7 @@
                                 <p class="text-xs md:text-sm text-slate-600">Buat konten berita terbaru</p>
                             </div>
                         </div>
-                        <button class="w-full bg-red-600 text-white py-2 md:py-2.5 rounded-lg font-medium hover:bg-red-700 transition text-sm md:text-base btn-touch">
+                        <button id="create-article-btn" class="w-full bg-red-600 text-white py-2 md:py-2.5 rounded-lg font-medium hover:bg-red-700 transition text-sm md:text-base btn-touch">
                             Buat Artikel
                         </button>
                     </div>
@@ -562,7 +538,7 @@
                                 <p class="text-xs md:text-sm text-slate-600">3 artikel menunggu persetujuan</p>
                             </div>
                         </div>
-                        <button class="w-full bg-white border border-slate-300 text-slate-800 py-2 md:py-2.5 rounded-lg font-medium hover:bg-slate-50 transition text-sm md:text-base btn-touch">
+                        <button id="goto-moderation-btn" class="w-full bg-white border border-slate-300 text-slate-800 py-2 md:py-2.5 rounded-lg font-medium hover:bg-slate-50 transition text-sm md:text-base btn-touch">
                             Tinjau Sekarang
                         </button>
                     </div>
@@ -577,7 +553,7 @@
                                 <p class="text-xs md:text-sm text-slate-600">Lihat performa konten minggu ini</p>
                             </div>
                         </div>
-                        <button class="w-full bg-amber-500 text-white py-2 md:py-2.5 rounded-lg font-medium hover:bg-amber-600 transition text-sm md:text-base btn-touch">
+                        <button id="view-analytics-btn" class="w-full bg-amber-500 text-white py-2 md:py-2.5 rounded-lg font-medium hover:bg-amber-600 transition text-sm md:text-base btn-touch">
                             Lihat Laporan
                         </button>
                     </div>
@@ -586,27 +562,409 @@
 
             <!-- Articles View (Hidden by default) -->
             <div id="articles-view" class="content-view hidden animate-fade-in">
-                <!-- Content will be loaded via JavaScript -->
+                <!-- Article List View (default) -->
+                <div id="article-list-view">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-800">Semua Artikel</h2>
+                            <p class="text-slate-500 text-sm">Kelola konten berita website Anda.</p>
+                        </div>
+                        <button id="create-new-article-btn" class="flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors shadow-sm">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>Tulis Artikel Baru</span>
+                        </button>
+                    </div>
+
+                    <div class="flex space-x-2 overflow-x-auto pb-2 mb-4">
+                        <button data-filter="all" class="article-filter-btn px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors bg-slate-800 text-white">
+                            Semua
+                        </button>
+                        <button data-filter="published" class="article-filter-btn px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
+                            Terbit
+                        </button>
+                        <button data-filter="draft" class="article-filter-btn px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
+                            Draft
+                        </button>
+                        <button data-filter="archive" class="article-filter-btn px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
+                            Arsip
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden desktop-table">
+                        <div class="table-container">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-semibold tracking-wider">
+                                        <th class="px-6 py-4">Judul Artikel</th>
+                                        <th class="px-6 py-4">Kategori</th>
+                                        <th class="px-6 py-4">Penulis</th>
+                                        <th class="px-6 py-4">Tanggal</th>
+                                        <th class="px-6 py-4">Status</th>
+                                        <th class="px-6 py-4 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="articles-tbody" class="divide-y divide-slate-100">
+                                    <!-- Articles will be loaded via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Card View for Articles -->
+                    <div class="mobile-card-view mt-6">
+                        <div id="articles-mobile-cards" class="table-mobile-card">
+                            <!-- Article cards will be loaded via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Create Article Form (hidden by default) -->
+                <div id="create-article-form" class="hidden animate-fade-in">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <div class="flex items-center gap-4">
+                            <button id="back-to-articles-btn" class="p-2 hover:bg-slate-200 rounded-lg text-slate-600 transition-colors">
+                                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                            </button>
+                            <div>
+                                <h2 class="text-2xl font-bold text-slate-800">Tulis Artikel Baru</h2>
+                                <p class="text-slate-500 text-sm">Buat konten menarik untuk pembaca Anda.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button class="px-4 py-2 text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 font-medium text-sm flex items-center gap-2">
+                                <i data-lucide="eye" class="w-4 h-4"></i> Pratinjau
+                            </button>
+                            <button class="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700 font-medium text-sm flex items-center gap-2 shadow-sm">
+                                <i data-lucide="save" class="w-4 h-4"></i> Terbitkan
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="lg:col-span-2 space-y-6">
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                                <input type="text" placeholder="Judul Artikel Berita..." class="w-full text-3xl font-bold text-slate-800 placeholder-slate-300 border-none focus:ring-0 focus:outline-none p-0" id="article-title" />
+                                <div class="mt-4 flex items-center gap-2 text-sm text-slate-500">
+                                    <span class="font-medium">Permalink:</span>
+                                    <span class="text-red-600 bg-red-50 px-2 py-0.5 rounded">https://dailiriz.id/nasional/judul-artikel-anda</span>
+                                    <button class="text-slate-400 hover:text-slate-600">
+                                        <i data-lucide="edit" class="w-3 h-3"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col min-h-[500px]">
+                                <div class="editor-toolbar">
+                                    <button><i data-lucide="bold" class="w-4 h-4"></i></button>
+                                    <button><i data-lucide="italic" class="w-4 h-4"></i></button>
+                                    <div class="w-px h-6 bg-slate-300 mx-1 self-center"></div>
+                                    <button class="flex items-center gap-1 text-sm font-medium">
+                                        <i data-lucide="type" class="w-4 h-4"></i> Heading
+                                    </button>
+                                    <div class="w-px h-6 bg-slate-300 mx-1 self-center"></div>
+                                    <button><i data-lucide="link" class="w-4 h-4"></i></button>
+                                    <button><i data-lucide="image" class="w-4 h-4"></i></button>
+                                </div>
+                                <textarea class="flex-1 w-full p-6 focus:outline-none text-slate-700 leading-relaxed resize-none" placeholder="Mulai menulis cerita Anda di sini..." id="article-content"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                                <h3 class="font-bold text-slate-800 mb-4 text-sm uppercase tracking-wider">Publikasi</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between text-sm">
+                                        <span class="text-slate-600 flex items-center gap-2">
+                                            <i data-lucide="check-circle" class="w-4 h-4"></i> Status:
+                                        </span>
+                                        <span class="font-medium text-amber-600">Draft</span>
+                                    </div>
+                                    <div class="flex items-center justify-between text-sm">
+                                        <span class="text-slate-600 flex items-center gap-2">
+                                            <i data-lucide="eye" class="w-4 h-4"></i> Visibilitas:
+                                        </span>
+                                        <span class="font-medium text-slate-800">Publik</span>
+                                    </div>
+                                </div>
+                                <hr class="my-4 border-slate-100" />
+                                <button class="w-full py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 text-sm font-medium">Simpan sebagai Draft</button>
+                            </div>
+
+                            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                                <h3 class="font-bold text-slate-800 mb-3 text-sm uppercase tracking-wider">Kategori</h3>
+                                <div class="space-y-2 max-h-40 overflow-y-auto">
+                                    <label class="flex items-center space-x-2 cursor-pointer hover:bg-slate-50 p-1 rounded">
+                                        <input type="checkbox" class="custom-checkbox" />
+                                        <span class="text-sm text-slate-700">Nasional</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer hover:bg-slate-50 p-1 rounded">
+                                        <input type="checkbox" class="custom-checkbox" />
+                                        <span class="text-sm text-slate-700">Internasional</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer hover:bg-slate-50 p-1 rounded">
+                                        <input type="checkbox" class="custom-checkbox" />
+                                        <span class="text-sm text-slate-700">Ekonomi</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer hover:bg-slate-50 p-1 rounded">
+                                        <input type="checkbox" class="custom-checkbox" />
+                                        <span class="text-sm text-slate-700">Olahraga</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer hover:bg-slate-50 p-1 rounded">
+                                        <input type="checkbox" class="custom-checkbox" />
+                                        <span class="text-sm text-slate-700">Teknologi</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Moderation View (Hidden by default) -->
             <div id="moderation-view" class="content-view hidden animate-fade-in">
-                <!-- Content will be loaded via JavaScript -->
+                <!-- Moderation List View (default) -->
+                <div id="moderation-list-view">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-800">Moderasi UGC</h2>
+                            <p class="text-slate-500 text-sm">Kelola kiriman konten dari pengguna publik.</p>
+                        </div>
+                        <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2" id="pending-count">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i> 3 Artikel menunggu persetujuan
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="table-container">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-semibold tracking-wider">
+                                        <th class="px-6 py-4">Judul & Cuplikan</th>
+                                        <th class="px-6 py-4">Penulis</th>
+                                        <th class="px-6 py-4">Kategori</th>
+                                        <th class="px-6 py-4">Waktu Kirim</th>
+                                        <th class="px-6 py-4 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="moderation-tbody" class="divide-y divide-slate-100">
+                                    <!-- Moderation articles will be loaded via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Card View for Moderation -->
+                    <div class="mobile-card-view mt-6">
+                        <div id="moderation-mobile-cards" class="table-mobile-card">
+                            <!-- Moderation cards will be loaded via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Moderation Detail View (hidden by default) -->
+                <div id="moderation-detail-view" class="hidden animate-fade-in">
+                    <div class="flex items-center gap-4 mb-6">
+                        <button id="back-to-moderation-btn" class="p-2 hover:bg-slate-200 rounded-lg text-slate-600 transition-colors">
+                            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-800">Tinjau Artikel Pengguna</h2>
+                            <p class="text-slate-500 text-sm">Review konten sebelum menerbitkannya.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="lg:col-span-2 bg-white p-6 md:p-8 rounded-xl shadow-sm border border-slate-200">
+                            <div class="mb-6 border-b border-slate-100 pb-6">
+                                <span class="inline-block px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-xs font-semibold mb-3" id="detail-category">Opini</span>
+                                <h1 class="text-2xl md:text-3xl font-bold text-slate-900 mb-4" id="detail-title">Opini: Mengapa Transportasi Umum Itu Penting</h1>
+                                <div class="flex items-center space-x-4 text-sm text-slate-500">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="user" class="w-4 h-4"></i>
+                                        <span id="detail-author">WargaSipil_01</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="clock" class="w-4 h-4"></i>
+                                        <span id="detail-date">Baru saja</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-slate-700 space-y-4">
+                                <p class="font-medium text-lg leading-relaxed" id="detail-excerpt">Kemacetan di Jakarta sudah tidak bisa ditolerir lagi...</p>
+                                <div class="w-full h-64 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 mb-6">
+                                    <div class="text-center">
+                                        <i data-lucide="image" class="w-12 h-12 mx-auto mb-2"></i>
+                                        <span>Gambar Artikel (Placeholder)</span>
+                                    </div>
+                                </div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 sticky top-24">
+                                <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                                    <i data-lucide="shield-check" class="w-5 h-5 text-red-600"></i> 
+                                    Keputusan Moderator
+                                </h3>
+                                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                                    <div class="flex gap-3">
+                                        <i data-lucide="alert-circle" class="text-yellow-600 flex-shrink-0 w-5 h-5"></i>
+                                        <div class="text-sm text-yellow-800">
+                                            <p class="font-semibold">Cek Plagiarisme</p>
+                                            <p>Skor orisinalitas: <strong>92%</strong> (Aman)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <button id="approve-article-btn" class="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium flex items-center justify-center gap-2 shadow-sm">
+                                        <i data-lucide="check-circle" class="w-4 h-4"></i> Setujui & Terbitkan
+                                    </button>
+                                    <button id="reject-article-btn" class="w-full py-3 bg-white border border-red-200 text-red-600 rounded-lg hover:bg-red-50 font-medium flex items-center justify-center gap-2">
+                                        <i data-lucide="x-circle" class="w-4 h-4"></i> Tolak Artikel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Users View (Hidden by default) -->
             <div id="users-view" class="content-view hidden animate-fade-in">
-                <!-- Content will be loaded via JavaScript -->
-            </div>
+                <div class="space-y-6 animate-fade-in">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-800">Pengguna & Tim</h2>
+                            <p class="text-slate-500 text-sm">Kelola akses admin, editor, dan pelanggan.</p>
+                        </div>
+                        <button class="flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors shadow-sm">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span class="hidden sm:inline">Tambah Pengguna</span>
+                        </button>
+                    </div>
 
-            <!-- Analytics View (Hidden by default) -->
-            <div id="analytics-view" class="content-view hidden animate-fade-in">
-                <!-- Content will be loaded via JavaScript -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="table-container">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-semibold tracking-wider">
+                                        <th class="px-6 py-4">Pengguna</th>
+                                        <th class="px-6 py-4">Peran</th>
+                                        <th class="px-6 py-4">Email</th>
+                                        <th class="px-6 py-4">Status</th>
+                                        <th class="px-6 py-4 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-tbody" class="divide-y divide-slate-100">
+                                    <!-- Users will be loaded via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Card View for Users -->
+                    <div class="mobile-card-view mt-6">
+                        <div id="users-mobile-cards" class="table-mobile-card">
+                            <!-- User cards will be loaded via JavaScript -->
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Settings View (Hidden by default) -->
             <div id="settings-view" class="content-view hidden animate-fade-in">
-                <!-- Content will be loaded via JavaScript -->
+                <div class="space-y-6 animate-fade-in max-w-4xl mx-auto">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">Pengaturan</h2>
+                        <p class="text-slate-500 text-sm">Atur profil akun dan preferensi website.</p>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="p-6 border-b border-slate-200">
+                            <h3 class="text-lg font-bold text-slate-800">Profil Saya</h3>
+                            <p class="text-sm text-slate-500">Kelola informasi pribadi dan foto profil Anda.</p>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div class="flex items-center space-x-6">
+                                <div class="relative">
+                                    <img src="https://ui-avatars.com/api/?name=Admin+Utama&background=c53030&color=fff" alt="Profile" class="w-24 h-24 rounded-full bg-red-50 border-4 border-white shadow-sm" />
+                                    <button class="absolute bottom-0 right-0 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 border-2 border-white shadow-sm">
+                                        <i data-lucide="camera" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-slate-700">Ganti Foto Profil</p>
+                                    <p class="text-xs text-slate-500 mt-1 mb-3">Mendukung JPG, PNG, atau GIF (Maks. 2MB)</p>
+                                    <button class="text-sm text-red-600 font-medium hover:underline">Hapus Foto</button>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Nama Lengkap</label>
+                                    <input type="text" value="Admin Utama" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Email</label>
+                                    <input type="email" value="admin@dailiriz.id" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none" />
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Bio Singkat</label>
+                                    <textarea rows="3" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none">Chief Editor untuk Dailiriz. Bertanggung jawab atas konten nasional.</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="p-6 border-b border-slate-200">
+                            <h3 class="text-lg font-bold text-slate-800">Umum & Keamanan</h3>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                                        <i data-lucide="globe" class="w-4 h-4 text-slate-400"></i> 
+                                        Nama Website
+                                    </label>
+                                    <input type="text" value="Dailiriz - Portal Berita Nasional" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
+                                        <i data-lucide="shield" class="w-4 h-4 text-slate-400"></i> 
+                                        Level Akses
+                                    </label>
+                                    <select class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none bg-white">
+                                        <option>Super Admin</option>
+                                        <option>Editor</option>
+                                        <option>Jurnalis</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr class="border-slate-100" />
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+                                    <i data-lucide="lock" class="w-4 h-4 text-slate-500"></i> 
+                                    Ubah Kata Sandi
+                                </h4>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <input type="password" placeholder="Sandi Lama" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none" />
+                                    <input type="password" placeholder="Sandi Baru" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none" />
+                                    <input type="password" placeholder="Konfirmasi Sandi" class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end">
+                            <button class="flex items-center space-x-2 bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors shadow-sm">
+                                <i data-lucide="save" class="w-4 h-4"></i>
+                                <span>Simpan Perubahan</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -629,17 +987,7 @@
         // Initialize Lucide Icons
         lucide.createIcons();
         
-        // Mobile navigation variables
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarClose = document.getElementById('sidebar-close');
-        const mobileOverlay = document.getElementById('mobile-overlay');
-        const mobileSearchBtn = document.getElementById('mobile-search-btn');
-        const mobileSearchBar = document.getElementById('mobile-search-bar');
-        const closeSearchBtn = document.getElementById('close-search-btn');
-        const mobileFab = document.getElementById('mobile-fab');
-        
-        // Sample data
+        // Data
         const sampleArticles = [
             { id: 1, title: "Pembangunan MRT Fase 3 Dimulai", category: "Nasional", author: "Budi Santoso", date: "26 Okt 2023", status: "Terbit", views: "12.5k" },
             { id: 2, title: "Timnas Indonesia Masuk Final Piala Asia", category: "Olahraga", author: "Andi Wijaya", date: "25 Okt 2023", status: "Terbit", views: "45.2k" },
@@ -648,7 +996,52 @@
             { id: 5, title: "Resep Rendang Daging Sapi Empuk", category: "Gaya Hidup", author: "Rina Masak", date: "23 Okt 2023", status: "Arsip", views: "5.1k" },
         ];
         
-        // Function to show/hide sidebar on mobile
+        const samplePendingArticles = [
+            { id: 101, title: "Opini: Mengapa Transportasi Umum Itu Penting", category: "Opini", author: "WargaSipil_01", date: "Baru saja", status: "Menunggu", excerpt: "Kemacetan di Jakarta sudah tidak bisa ditolerir lagi..." },
+            { id: 102, title: "Wisata Tersembunyi di Banyuwangi", category: "Travel", author: "JalanJalanYuk", date: "1 Jam lalu", status: "Menunggu", excerpt: "Banyuwangi menyimpan sejuta pesona yang belum banyak diketahui..." },
+            { id: 103, title: "Resep Seblak Viral Kekinian", category: "Kuliner", author: "ChefRumahan", date: "3 Jam lalu", status: "Menunggu", excerpt: "Siapa yang tidak suka seblak? Berikut adalah resep rahasianya..." },
+        ];
+        
+        const sampleUsers = [
+            { id: 1, name: "Admin Utama", email: "admin@dailiriz.id", role: "Super Admin", status: "Aktif", avatar: "AU" },
+            { id: 2, name: "Siti Rahma", email: "siti@dailiriz.id", role: "Editor", status: "Aktif", avatar: "SR" },
+            { id: 3, name: "Budi Santoso", email: "budi@dailiriz.id", role: "Jurnalis", status: "Cuti", avatar: "BS" },
+            { id: 4, name: "John Doe", email: "john@gmail.com", role: "Subscriber", status: "Nonaktif", avatar: "JD" },
+            { id: 5, name: "Sarah Smith", email: "sarah@yahoo.com", role: "Subscriber", status: "Aktif", avatar: "SS" },
+        ];
+        
+        const recentComments = [
+            { user: "User123", comment: "Berita yang sangat informatif!", article: "Pembangunan MRT..." },
+            { user: "NetizenIndo", comment: "Semoga menang terus Timnas!", article: "Timnas Indonesia..." },
+            { user: "GadgetFreak", comment: "Harganya terlalu mahal menurut saya.", article: "Review iPhone..." },
+        ];
+        
+        const chartData = [
+            { name: 'Sen', views: 4000, visitors: 2400 },
+            { name: 'Sel', views: 3000, visitors: 1398 },
+            { name: 'Rab', views: 2000, visitors: 9800 },
+            { name: 'Kam', views: 2780, visitors: 3908 },
+            { name: 'Jum', views: 1890, visitors: 4800 },
+            { name: 'Sab', views: 2390, visitors: 3800 },
+            { name: 'Min', views: 3490, visitors: 4300 },
+        ];
+        
+        // State
+        let currentArticleFilter = 'all';
+        let selectedModerationArticle = null;
+        
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarClose = document.getElementById('sidebar-close');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+        const mobileSearchBtn = document.getElementById('mobile-search-btn');
+        const mobileSearchBar = document.getElementById('mobile-search-bar');
+        const closeSearchBtn = document.getElementById('close-search-btn');
+        const mobileFab = document.getElementById('mobile-fab');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        // Navigation functions
         function toggleSidebar(show) {
             if (window.innerWidth < 768) {
                 if (show) {
@@ -663,12 +1056,484 @@
             }
         }
         
-        // Sidebar toggle events
+        function showToast(message = 'Tindakan berhasil!') {
+            const toast = document.getElementById('toast');
+            const toastText = toast.querySelector('p');
+            toastText.textContent = message;
+            
+            toast.classList.remove('translate-y-24');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-24');
+            }, 3000);
+        }
+        
+        function navigateToTab(tabId) {
+            // Hide all content views
+            document.querySelectorAll('.content-view').forEach(view => view.classList.add('hidden'));
+            
+            // Show selected content view
+            const targetView = document.getElementById(`${tabId}-view`);
+            if (targetView) {
+                targetView.classList.remove('hidden');
+                targetView.classList.add('animate-fade-in');
+            }
+            
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-menu-item').forEach(item => item.classList.remove('active'));
+            document.querySelector(`.sidebar-menu-item[data-tab="${tabId}"]`).classList.add('active');
+            
+            // Update FAB
+            const fabIcon = mobileFab.querySelector('i');
+            if (tabId === 'articles') {
+                fabIcon.setAttribute('data-lucide', 'plus');
+                mobileFab.onclick = () => showCreateArticleForm();
+            } else if (tabId === 'moderation') {
+                fabIcon.setAttribute('data-lucide', 'check-circle');
+                mobileFab.onclick = () => showToast('Meninjau artikel');
+            } else {
+                fabIcon.setAttribute('data-lucide', 'plus');
+                mobileFab.onclick = () => showToast('Aksi baru');
+            }
+            lucide.createIcons();
+            
+            // Close sidebar on mobile
+            toggleSidebar(false);
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Render functions
+        function renderDashboard() {
+            // Render recent comments
+            const commentsContainer = document.getElementById('recent-comments');
+            if (commentsContainer) {
+                commentsContainer.innerHTML = recentComments.map((item, idx) => `
+                    <div class="flex items-start space-x-3 pb-4 border-b border-slate-100 last:border-0 last:pb-0">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-red-400 to-amber-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                            ${item.user.charAt(0)}
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-slate-800">${item.user}</p>
+                            <p class="text-xs text-slate-500 mb-1">di ${item.article}</p>
+                            <p class="text-sm text-slate-600 italic">"${item.comment}"</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Render chart
+            renderChart();
+            
+            // Render articles table
+            renderArticlesTable('dashboard-articles-tbody', sampleArticles);
+            renderArticlesMobileCards('dashboard-mobile-cards', sampleArticles);
+        }
+        
+        function renderChart() {
+            const ctx = document.getElementById('analyticsChart');
+            if (!ctx) return;
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartData.map(d => d.name),
+                    datasets: [{
+                        label: 'Tayangan',
+                        data: chartData.map(d => d.views),
+                        borderColor: '#dc2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function renderArticlesTable(containerId, articles) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            container.innerHTML = articles.map(article => {
+                const statusClass = {
+                    'Terbit': 'status-published',
+                    'Draft': 'status-draft',
+                    'Arsip': 'status-archive',
+                    'Menunggu': 'status-pending'
+                }[article.status] || 'status-published';
+                
+                return `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <p class="font-semibold text-slate-800 truncate max-w-xs">${article.title}</p>
+                            <p class="text-xs text-slate-400 mt-1">${article.views} tayangan</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700">${article.category}</span>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-slate-600">${article.author}</td>
+                        <td class="px-6 py-4 text-sm text-slate-500">${article.date}</td>
+                        <td class="px-6 py-4">
+                            <span class="status-badge ${statusClass}">${article.status}</span>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex justify-center space-x-2">
+                                <button class="p-1.5 hover:bg-red-100 text-red-600 rounded transition-colors edit-article-btn" data-id="${article.id}">
+                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                </button>
+                                <button class="p-1.5 hover:bg-red-50 text-red-600 rounded transition-colors delete-article-btn" data-id="${article.id}">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+        }
+        
+        function renderArticlesMobileCards(containerId, articles) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            container.innerHTML = articles.map(article => {
+                const statusClass = {
+                    'Terbit': 'status-published',
+                    'Draft': 'status-draft',
+                    'Arsip': 'status-archive',
+                    'Menunggu': 'status-pending'
+                }[article.status] || 'status-published';
+                
+                return `
+                    <div class="table-card-mobile">
+                        <div class="table-card-header">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-semibold text-slate-800 text-sm truncate flex-1 pr-2">${article.title}</h4>
+                                <span class="status-badge ${statusClass} flex-shrink-0">${article.status}</span>
+                            </div>
+                        </div>
+                        <div class="table-card-body">
+                            <div class="table-card-row">
+                                <span class="table-card-label">Kategori</span>
+                                <span class="table-card-value">${article.category}</span>
+                            </div>
+                            <div class="table-card-row">
+                                <span class="table-card-label">Penulis</span>
+                                <span class="table-card-value">${article.author}</span>
+                            </div>
+                            <div class="table-card-row">
+                                <span class="table-card-label">Tanggal</span>
+                                <span class="table-card-value">${article.date}</span>
+                            </div>
+                            <div class="table-card-row">
+                                <span class="table-card-label">Tayangan</span>
+                                <span class="table-card-value">${article.views}</span>
+                            </div>
+                            <div class="pt-3 flex justify-between">
+                                <button class="flex-1 mr-2 bg-slate-100 text-slate-700 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1 btn-touch edit-article-btn" data-id="${article.id}">
+                                    <i data-lucide="edit" class="w-3 h-3"></i> Edit
+                                </button>
+                                <button class="flex-1 ml-2 bg-red-50 text-red-600 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1 btn-touch delete-article-btn" data-id="${article.id}">
+                                    <i data-lucide="trash-2" class="w-3 h-3"></i> Hapus
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+        }
+        
+        function renderModerationTable() {
+            const container = document.getElementById('moderation-tbody');
+            const mobileContainer = document.getElementById('moderation-mobile-cards');
+            
+            if (!container || !mobileContainer) return;
+            
+            // Update pending count
+            const pendingCount = document.getElementById('pending-count');
+            if (pendingCount) {
+                pendingCount.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4"></i> ${samplePendingArticles.length} Artikel menunggu persetujuan`;
+            }
+            
+            // Desktop table
+            container.innerHTML = samplePendingArticles.map(article => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 max-w-md">
+                        <p class="font-semibold text-slate-800">${article.title}</p>
+                        <p class="text-xs text-slate-500 mt-1 truncate">${article.excerpt}</p>
+                    </td>
+                    <td class="px-6 py-4">${article.author}</td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">${article.category}</span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-500">${article.date}</td>
+                    <td class="px-6 py-4 text-center">
+                        <button class="px-3 py-1.5 bg-red-50 text-red-600 rounded hover:bg-red-100 text-sm font-medium transition-colors review-article-btn" data-id="${article.id}">
+                            Tinjau
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Mobile cards
+            mobileContainer.innerHTML = samplePendingArticles.map(article => `
+                <div class="table-card-mobile">
+                    <div class="table-card-header">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-semibold text-slate-800 text-sm truncate flex-1 pr-2">${article.title}</h4>
+                            <span class="status-badge status-pending flex-shrink-0">${article.status}</span>
+                        </div>
+                    </div>
+                    <div class="table-card-body">
+                        <div class="table-card-row">
+                            <span class="table-card-label">Penulis</span>
+                            <span class="table-card-value">${article.author}</span>
+                        </div>
+                        <div class="table-card-row">
+                            <span class="table-card-label">Kategori</span>
+                            <span class="table-card-value">${article.category}</span>
+                        </div>
+                        <div class="table-card-row">
+                            <span class="table-card-label">Waktu Kirim</span>
+                            <span class="table-card-value">${article.date}</span>
+                        </div>
+                        <div class="table-card-row">
+                            <span class="table-card-label">Cuplikan</span>
+                            <span class="table-card-value text-xs">${article.excerpt}</span>
+                        </div>
+                        <div class="pt-3">
+                            <button class="w-full bg-red-50 text-red-600 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1 btn-touch review-article-btn" data-id="${article.id}">
+                                <i data-lucide="eye" class="w-3 h-3"></i> Tinjau Artikel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+        
+        function renderUsersTable() {
+            const container = document.getElementById('users-tbody');
+            const mobileContainer = document.getElementById('users-mobile-cards');
+            
+            if (!container || !mobileContainer) return;
+            
+            // Desktop table
+            container.innerHTML = sampleUsers.map(user => {
+                const roleClass = user.role === 'Super Admin' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                                user.role === 'Editor' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                                'bg-slate-50 text-slate-600 border-slate-200';
+                
+                const statusClass = user.status === 'Aktif' ? 'bg-green-100 text-green-800' : 
+                                  user.status === 'Cuti' ? 'bg-orange-100 text-orange-800' : 
+                                  'bg-red-100 text-red-800';
+                
+                return `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center space-x-3">
+                                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random" 
+                                     alt="${user.name}" 
+                                     class="w-10 h-10 rounded-full bg-slate-100" />
+                                <div>
+                                    <p class="font-semibold text-slate-800">${user.name}</p>
+                                    <p class="text-xs text-slate-400">ID: #${user.id}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${roleClass}">
+                                ${user.role}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-slate-600 flex items-center gap-2">
+                            <i data-lucide="mail" class="w-4 h-4 text-slate-400"></i>
+                            ${user.email}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass}">
+                                ${user.status}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <button class="text-slate-400 hover:text-slate-600">
+                                <i data-lucide="more-vertical" class="w-5 h-5"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            // Mobile cards
+            mobileContainer.innerHTML = sampleUsers.map(user => {
+                const statusClass = user.status === 'Aktif' ? 'bg-green-100 text-green-800' : 
+                                  user.status === 'Cuti' ? 'bg-orange-100 text-orange-800' : 
+                                  'bg-red-100 text-red-800';
+                
+                return `
+                    <div class="table-card-mobile">
+                        <div class="table-card-header">
+                            <div class="flex items-center space-x-3">
+                                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random" 
+                                     alt="${user.name}" 
+                                     class="w-10 h-10 rounded-full bg-slate-100" />
+                                <div>
+                                    <p class="font-semibold text-slate-800">${user.name}</p>
+                                    <p class="text-xs text-slate-400">ID: #${user.id}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-card-body">
+                            <div class="table-card-row">
+                                <span class="table-card-label">Peran</span>
+                                <span class="table-card-value">${user.role}</span>
+                            </div>
+                            <div class="table-card-row">
+                                <span class="table-card-label">Email</span>
+                                <span class="table-card-value">${user.email}</span>
+                            </div>
+                            <div class="table-card-row">
+                                <span class="table-card-label">Status</span>
+                                <span class="table-card-value">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass}">
+                                        ${user.status}
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="pt-3">
+                                <button class="w-full bg-slate-100 text-slate-700 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1 btn-touch">
+                                    <i data-lucide="settings" class="w-3 h-3"></i> Kelola Pengguna
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+        }
+        
+        // Article management
+        function filterArticles(filter) {
+            currentArticleFilter = filter;
+            
+            // Update filter buttons
+            document.querySelectorAll('.article-filter-btn').forEach(btn => {
+                if (btn.dataset.filter === filter) {
+                    btn.classList.add('bg-slate-800', 'text-white');
+                    btn.classList.remove('bg-white', 'text-slate-600', 'border', 'border-slate-200');
+                } else {
+                    btn.classList.remove('bg-slate-800', 'text-white');
+                    btn.classList.add('bg-white', 'text-slate-600', 'border', 'border-slate-200');
+                }
+            });
+            
+            // Filter articles
+            let filteredArticles = sampleArticles;
+            if (filter === 'published') {
+                filteredArticles = sampleArticles.filter(a => a.status === 'Terbit');
+            } else if (filter === 'draft') {
+                filteredArticles = sampleArticles.filter(a => a.status === 'Draft');
+            } else if (filter === 'archive') {
+                filteredArticles = sampleArticles.filter(a => a.status === 'Arsip');
+            }
+            
+            // Render filtered articles
+            renderArticlesTable('articles-tbody', filteredArticles);
+            renderArticlesMobileCards('articles-mobile-cards', filteredArticles);
+        }
+        
+        function showCreateArticleForm() {
+            document.getElementById('article-list-view').classList.add('hidden');
+            document.getElementById('create-article-form').classList.remove('hidden');
+            document.getElementById('create-article-form').classList.add('animate-fade-in');
+        }
+        
+        function showArticleListView() {
+            document.getElementById('create-article-form').classList.add('hidden');
+            document.getElementById('article-list-view').classList.remove('hidden');
+            document.getElementById('article-list-view').classList.add('animate-fade-in');
+        }
+        
+        function showModerationDetail(articleId) {
+            const article = samplePendingArticles.find(a => a.id === parseInt(articleId));
+            if (!article) return;
+            
+            selectedModerationArticle = article;
+            
+            // Update detail view
+            document.getElementById('detail-category').textContent = article.category;
+            document.getElementById('detail-title').textContent = article.title;
+            document.getElementById('detail-author').textContent = article.author;
+            document.getElementById('detail-date').textContent = article.date;
+            document.getElementById('detail-excerpt').textContent = article.excerpt;
+            
+            // Switch views
+            document.getElementById('moderation-list-view').classList.add('hidden');
+            document.getElementById('moderation-detail-view').classList.remove('hidden');
+            document.getElementById('moderation-detail-view').classList.add('animate-fade-in');
+        }
+        
+        function showModerationListView() {
+            document.getElementById('moderation-detail-view').classList.add('hidden');
+            document.getElementById('moderation-list-view').classList.remove('hidden');
+            document.getElementById('moderation-list-view').classList.add('animate-fade-in');
+            selectedModerationArticle = null;
+        }
+        
+        function handleApproveArticle() {
+            if (!selectedModerationArticle) return;
+            
+            showToast(`Artikel "${selectedModerationArticle.title}" berhasil disetujui!`);
+            showModerationListView();
+            
+            // In a real app, you would update the data here
+        }
+        
+        function handleRejectArticle() {
+            if (!selectedModerationArticle) return;
+            
+            if (confirm(`Apakah Anda yakin ingin menolak artikel "${selectedModerationArticle.title}"?`)) {
+                showToast(`Artikel "${selectedModerationArticle.title}" telah ditolak.`);
+                showModerationListView();
+                
+                // In a real app, you would update the data here
+            }
+        }
+        
+        // Event Listeners
         mobileMenuBtn.addEventListener('click', () => toggleSidebar(true));
         sidebarClose.addEventListener('click', () => toggleSidebar(false));
         mobileOverlay.addEventListener('click', () => toggleSidebar(false));
         
-        // Mobile search toggle
         mobileSearchBtn.addEventListener('click', () => {
             mobileSearchBar.classList.toggle('hidden');
         });
@@ -677,237 +1542,104 @@
             mobileSearchBar.classList.add('hidden');
         });
         
-        // Mobile FAB action
-        mobileFab.addEventListener('click', () => {
-            // Default action: create new article
-            showToast('Membuka form artikel baru');
-            // In a real app, you would navigate to article creation
-        });
-        
-        // Function to render articles table for desktop
-        function renderDesktopTable() {
-            const tbody = document.querySelector('#dashboard-view .desktop-table tbody');
-            if (!tbody) return;
-            
-            tbody.innerHTML = '';
-            
-            sampleArticles.forEach(article => {
-                const statusClass = {
-                    'Terbit': 'status-published',
-                    'Draft': 'status-draft',
-                    'Arsip': 'status-archive'
-                }[article.status] || 'status-published';
-                
-                const row = document.createElement('tr');
-                row.className = 'hover:bg-slate-50 transition-colors';
-                row.innerHTML = `
-                    <td class="px-4 md:px-6 py-3 md:py-4">
-                        <p class="font-semibold text-slate-800 text-sm md:text-base truncate max-w-[200px]">${article.title}</p>
-                        <p class="text-xs text-slate-500 mt-1">${article.views} tayangan</p>
-                    </td>
-                    <td class="px-4 md:px-6 py-3 md:py-4">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-100">${article.category}</span>
-                    </td>
-                    <td class="px-4 md:px-6 py-3 md:py-4 text-sm text-slate-600">${article.author}</td>
-                    <td class="px-4 md:px-6 py-3 md:py-4 text-sm text-slate-500">${article.date}</td>
-                    <td class="px-4 md:px-6 py-3 md:py-4">
-                        <span class="status-badge ${statusClass}">${article.status}</span>
-                    </td>
-                    <td class="px-4 md:px-6 py-3 md:py-4 text-center">
-                        <div class="flex justify-center gap-1 md:gap-2">
-                            <button class="p-1 md:p-1.5 hover:bg-slate-100 text-slate-600 rounded btn-touch">
-                                <i data-lucide="edit" class="w-3 h-3 md:w-4 md:h-4"></i>
-                            </button>
-                            <button class="p-1 md:p-1.5 hover:bg-red-50 text-red-600 rounded btn-touch">
-                                <i data-lucide="trash-2" class="w-3 h-3 md:w-4 md:h-4"></i>
-                            </button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-        
-        // Function to render articles as cards for mobile
-        function renderMobileCards() {
-            const container = document.querySelector('#dashboard-view .table-mobile-card');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            sampleArticles.forEach(article => {
-                const statusClass = {
-                    'Terbit': 'status-published',
-                    'Draft': 'status-draft',
-                    'Arsip': 'status-archive'
-                }[article.status] || 'status-published';
-                
-                const card = document.createElement('div');
-                card.className = 'table-card-mobile';
-                card.innerHTML = `
-                    <div class="table-card-header">
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-semibold text-slate-800 text-sm truncate flex-1 pr-2">${article.title}</h4>
-                            <span class="status-badge ${statusClass} flex-shrink-0">${article.status}</span>
-                        </div>
-                    </div>
-                    <div class="table-card-body">
-                        <div class="table-card-row">
-                            <span class="table-card-label">Kategori</span>
-                            <span class="table-card-value">${article.category}</span>
-                        </div>
-                        <div class="table-card-row">
-                            <span class="table-card-label">Penulis</span>
-                            <span class="table-card-value">${article.author}</span>
-                        </div>
-                        <div class="table-card-row">
-                            <span class="table-card-label">Tanggal</span>
-                            <span class="table-card-value">${article.date}</span>
-                        </div>
-                        <div class="table-card-row">
-                            <span class="table-card-label">Tayangan</span>
-                            <span class="table-card-value">${article.views}</span>
-                        </div>
-                        <div class="pt-3 flex justify-between">
-                            <button class="flex-1 mr-2 bg-slate-100 text-slate-700 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1 btn-touch">
-                                <i data-lucide="edit" class="w-3 h-3"></i> Edit
-                            </button>
-                            <button class="flex-1 ml-2 bg-red-50 text-red-600 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1 btn-touch">
-                                <i data-lucide="trash-2" class="w-3 h-3"></i> Hapus
-                            </button>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-        
-        // Sidebar navigation
-        const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item');
-        const contentViews = document.querySelectorAll('.content-view');
-        
-        sidebarMenuItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                // Remove active class from all items
-                sidebarMenuItems.forEach(i => i.classList.remove('active'));
-                
-                // Add active class to clicked item
-                item.classList.add('active');
-                
-                // Hide all content views
-                contentViews.forEach(view => view.classList.add('hidden'));
-                
-                // Show the selected content view
-                const tabId = item.getAttribute('data-tab');
-                const targetView = document.getElementById(`${tabId}-view`);
-                if (targetView) {
-                    targetView.classList.remove('hidden');
-                    targetView.classList.add('animate-fade-in');
-                    
-                    // Update FAB icon based on tab
-                    const fabIcon = mobileFab.querySelector('i');
-                    if (tabId === 'articles') {
-                        fabIcon.setAttribute('data-lucide', 'plus');
-                        mobileFab.setAttribute('title', 'Buat Artikel Baru');
-                    } else if (tabId === 'moderation') {
-                        fabIcon.setAttribute('data-lucide', 'check-circle');
-                        mobileFab.setAttribute('title', 'Setujui Artikel');
-                    } else {
-                        fabIcon.setAttribute('data-lucide', 'plus');
-                        mobileFab.setAttribute('title', 'Tambah Baru');
-                    }
-                    lucide.createIcons();
-                }
-                
-                // Close sidebar on mobile after selection
-                toggleSidebar(false);
-                
-                // Scroll to top of content
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        });
-        
-        // Logout button
-        document.getElementById('logout-btn').addEventListener('click', () => {
+        logoutBtn.addEventListener('click', () => {
             if (confirm('Apakah Anda yakin ingin keluar?')) {
                 showToast('Berhasil logout!');
-                // In a real app, you would redirect to login page
-                // window.location.href = '/login';
+                // In a real app: window.location.href = '/login';
             }
         });
         
-        // Toast notification function
-        function showToast(message = 'Tindakan berhasil!') {
-            const toast = document.getElementById('toast');
-            const toastText = toast.querySelector('p');
-            toastText.textContent = message;
-            
-            // Show toast
-            toast.classList.remove('translate-y-24');
-            
-            // Hide toast after 3 seconds
-            setTimeout(() => {
-                toast.classList.add('translate-y-24');
-            }, 3000);
-        }
+        // Sidebar navigation
+        document.querySelectorAll('.sidebar-menu-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tabId = item.getAttribute('data-tab');
+                navigateToTab(tabId);
+            });
+        });
         
-        // Handle window resize
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
+        // Dashboard quick actions
+        document.getElementById('create-article-btn')?.addEventListener('click', () => {
+            navigateToTab('articles');
+            setTimeout(() => showCreateArticleForm(), 100);
+        });
+        
+        document.getElementById('goto-moderation-btn')?.addEventListener('click', () => {
+            navigateToTab('moderation');
+        });
+        
+        document.getElementById('view-analytics-btn')?.addEventListener('click', () => {
+            showToast('Membuka laporan analitik lengkap');
+        });
+        
+        // Articles management
+        document.getElementById('create-new-article-btn')?.addEventListener('click', showCreateArticleForm);
+        document.getElementById('back-to-articles-btn')?.addEventListener('click', showArticleListView);
+        
+        document.querySelectorAll('.article-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => filterArticles(btn.dataset.filter));
+        });
+        
+        // Moderation management
+        document.getElementById('back-to-moderation-btn')?.addEventListener('click', showModerationListView);
+        document.getElementById('approve-article-btn')?.addEventListener('click', handleApproveArticle);
+        document.getElementById('reject-article-btn')?.addEventListener('click', handleRejectArticle);
+        
+        // Mobile FAB
+        mobileFab.addEventListener('click', () => {
+            const activeTab = document.querySelector('.sidebar-menu-item.active').dataset.tab;
+            
+            if (activeTab === 'articles') {
+                showCreateArticleForm();
+            } else if (activeTab === 'moderation') {
+                showToast('Meninjau artikel terbaru');
+            } else {
+                showToast('Aksi baru');
+            }
+        });
+        
+        // Event delegation for dynamic elements
+        document.addEventListener('click', (e) => {
+            // Edit article buttons
+            if (e.target.closest('.edit-article-btn')) {
+                const articleId = e.target.closest('.edit-article-btn').dataset.id;
+                showToast(`Membuka editor artikel #${articleId}`);
+            }
+            
+            // Delete article buttons
+            if (e.target.closest('.delete-article-btn')) {
+                const articleId = e.target.closest('.delete-article-btn').dataset.id;
+                if (confirm('Apakah Anda yakin ingin menghapus artikel ini?')) {
+                    showToast(`Artikel #${articleId} berhasil dihapus`);
+                }
+            }
+            
+            // Review article buttons
+            if (e.target.closest('.review-article-btn')) {
+                const articleId = e.target.closest('.review-article-btn').dataset.id;
+                showModerationDetail(articleId);
+            }
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Render all data
+            renderDashboard();
+            filterArticles('all');
+            renderModerationTable();
+            renderUsersTable();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
                 if (window.innerWidth >= 768) {
-                    // On desktop, ensure sidebar is visible and overlay hidden
                     sidebar.classList.remove('active');
                     mobileOverlay.classList.add('hidden');
                     document.body.style.overflow = '';
                     mobileSearchBar.classList.add('hidden');
                 }
-            }, 250);
-        });
-        
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            // Render articles for both desktop and mobile
-            renderDesktopTable();
-            renderMobileCards();
-            
-            // Set initial active state
-            document.querySelector('.sidebar-menu-item[data-tab="dashboard"]').classList.add('active');
-            
-            // Add click events to action buttons
-            document.addEventListener('click', (e) => {
-                // Edit buttons
-                if (e.target.closest('button')?.querySelector('i[data-lucide="edit"]')) {
-                    showToast('Membuka editor artikel');
-                }
-                
-                // Delete buttons
-                if (e.target.closest('button')?.querySelector('i[data-lucide="trash-2"]')) {
-                    if (confirm('Apakah Anda yakin ingin menghapus artikel ini?')) {
-                        showToast('Artikel berhasil dihapus');
-                    }
-                }
-                
-                // Quick action buttons
-                if (e.target.closest('.bg-red-600') && e.target.closest('.bg-red-600').textContent.includes('Buat Artikel')) {
-                    showToast('Membuka form artikel baru');
-                }
-                
-                if (e.target.closest('.bg-white.border') && e.target.closest('.bg-white.border').textContent.includes('Tinjau Sekarang')) {
-                    // Navigate to moderation tab
-                    document.querySelector('.sidebar-menu-item[data-tab="moderation"]').click();
-                }
-                
-                if (e.target.closest('.bg-amber-500') && e.target.closest('.bg-amber-500').textContent.includes('Laporan')) {
-                    // Navigate to analytics tab
-                    document.querySelector('.sidebar-menu-item[data-tab="analytics"]').click();
-                }
             });
             
-            // Handle escape key to close sidebar
+            // Handle escape key
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     toggleSidebar(false);
@@ -915,17 +1647,14 @@
                 }
             });
             
-            // Touch gesture for swipe to close sidebar (optional enhancement)
+            // Touch gesture for swipe to close sidebar
             let touchStartX = 0;
-            let touchEndX = 0;
-            
             document.addEventListener('touchstart', (e) => {
                 touchStartX = e.changedTouches[0].screenX;
             });
             
             document.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                // If swiped left from right edge, close sidebar
+                const touchEndX = e.changedTouches[0].screenX;
                 if (touchStartX - touchEndX > 100 && window.innerWidth < 768) {
                     toggleSidebar(false);
                 }
