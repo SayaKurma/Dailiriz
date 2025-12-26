@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dailiriz - Baca Artikel</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        gold: {
+                            400: '#FFD700',
+                            500: '#DAA520',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c53030;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9b2c2c;
+        }
+        
+        .article-content p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+        
+        .article-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+        
+        .article-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        
+        .article-content blockquote {
+            border-left: 4px solid #dc2626;
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: #4b5563;
+        }
+        
+        .article-content ul {
+            list-style-type: disc;
+            padding-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-content ol {
+            list-style-type: decimal;
+            padding-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800">
+    <!-- Top Bar (Date & Socials) -->
+    <div class="bg-slate-900 text-slate-300 py-1 text-xs">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <span id="current-date">Senin, 1 Januari 2024</span>
+            <div class="flex gap-4">
+                <a href="index.html" class="hover:text-white">← Kembali ke Beranda</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header with Red-Gold Gradient -->
+    <header class="bg-gradient-to-r from-red-900 via-red-600 to-amber-400 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center gap-2">
+                    <i data-lucide="newspaper" class="text-white w-8 h-8"></i>
+                    <h1 class="font-serif text-2xl md:text-3xl font-bold text-white tracking-wide">
+                        Daili<span class="text-amber-200 italic">Riz</span>
+                    </h1>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex space-x-8 text-white font-medium text-sm tracking-wider">
+                    <a href="index.html" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">BERANDA</a>
+                    <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">NASIONAL</a>
+                    <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">EKONOMI</a>
+                    <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">TEKNOLOGI</a>
+                </nav>
+
+                <!-- Search & Share -->
+                <div class="flex items-center gap-4">
+                    <button id="share-btn" class="text-white hover:text-amber-200 transition flex items-center gap-2">
+                        <i data-lucide="share-2" class="w-5 h-5"></i>
+                        <span class="hidden md:inline text-sm">Bagikan</span>
+                    </button>
+                    <a href="index.html" class="text-white hover:text-amber-200 transition">
+                        <i data-lucide="home" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Article Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Breadcrumb -->
+            <nav class="mb-8 text-sm text-slate-500">
+                <a href="index.html" class="hover:text-red-600">Beranda</a>
+                <span class="mx-2">/</span>
+                <span id="article-category" class="text-red-600 font-medium"></span>
+            </nav>
+
+            <!-- Article Header -->
+            <header class="mb-8">
+                <span id="article-category-badge" class="inline-block bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full mb-4"></span>
+                <h1 id="article-title" class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-4"></h1>
+                <div class="flex items-center gap-4 text-slate-600 text-sm mb-6">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                        <span id="article-author">Redaksi Dailiriz</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                        <span id="article-date"></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="clock" class="w-4 h-4"></i>
+                        <span id="article-time">5 min read</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Featured Image -->
+            <div class="mb-8 rounded-xl overflow-hidden shadow-lg">
+                <img id="article-image" src="" alt="" class="w-full h-auto max-h-[500px] object-cover">
+                <p class="text-xs text-slate-500 mt-2 italic">Sumber: <span id="image-source">Unsplash</span></p>
+            </div>
+
+            <!-- Article Content -->
+            <article class="prose prose-lg max-w-none mb-12">
+                <div id="article-content" class="article-content text-slate-700">
+                    <!-- Content will be loaded here -->
+                </div>
+            </article>
+
+            <!-- Share Section -->
+            <div class="bg-slate-50 p-6 rounded-xl mb-12">
+                <h3 class="font-bold text-lg mb-4 text-slate-800">Bagikan Artikel Ini</h3>
+                <div class="flex gap-4">
+                    <button class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                        <i data-lucide="facebook" class="w-4 h-4"></i>
+                        Facebook
+                    </button>
+                    <button class="flex items-center gap-2 bg-blue-400 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition">
+                        <i data-lucide="twitter" class="w-4 h-4"></i>
+                        Twitter
+                    </button>
+                    <button class="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                        <i data-lucide="link" class="w-4 h-4"></i>
+                        Salin Link
+                    </button>
+                </div>
+            </div>
+
+            <!-- Related Articles -->
+            <section class="mb-16">
+                <h2 class="font-serif text-2xl font-bold text-slate-800 mb-6 pb-2 border-b border-slate-200">Artikel Terkait</h2>
+                <div id="related-articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Related articles will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Comments Section -->
+            <section class="bg-white rounded-xl shadow-sm p-6 mb-12">
+                <h2 class="font-serif text-2xl font-bold text-slate-800 mb-6">Komentar</h2>
+                <div class="mb-8">
+                    <textarea placeholder="Tulis komentar Anda..." class="w-full p-4 border border-slate-300 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200" rows="4"></textarea>
+                    <button class="mt-4 bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition">Kirim Komentar</button>
+                </div>
+                <div class="space-y-6">
+                    <!-- Sample Comments -->
+                    <div class="border-b border-slate-100 pb-6">
+                        <div class="flex items-start gap-4">
+                            <img src="https://ui-avatars.com/api/?name=Ahmad+Santoso&background=random" class="w-10 h-10 rounded-full" alt="Commenter">
+                            <div>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <h4 class="font-bold text-slate-800">Ahmad Santoso</h4>
+                                    <span class="text-xs text-slate-500">2 jam yang lalu</span>
+                                </div>
+                                <p class="text-slate-600">Artikel yang sangat informatif! Saya sangat mendukung program infrastruktur hijau ini.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer dengan gradient merah-emas -->
+    <footer class="bg-gradient-to-r from-red-900 via-red-600 to-amber-400 text-white pt-12 pb-8 mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                
+                <!-- Brand Column -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="newspaper" class="text-white w-8 h-8"></i>
+                        <h2 class="font-serif text-2xl font-bold tracking-wide">
+                            Daili<span class="text-amber-200 italic">Riz</span>
+                        </h2>
+                    </div>
+                    <p class="text-red-100 text-sm leading-relaxed">
+                        Menyajikan berita terpercaya, tajam, dan berimbang dari seluruh pelosok negeri untuk membangun wawasan bangsa.
+                    </p>
+                    <div class="flex gap-4 mt-4">
+                        <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+                        <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h3 class="font-bold text-lg mb-4 text-amber-200 font-serif">Kategori</h3>
+                    <ul class="space-y-2 text-sm text-red-50">
+                        <li><a href="#" class="hover:text-white transition">Politik & Hukum</a></li>
+                        <li><a href="#" class="hover:text-white transition">Ekonomi Bisnis</a></li>
+                        <li><a href="#" class="hover:text-white transition">Olahraga</a></li>
+                        <li><a href="#" class="hover:text-white transition">Sains & Tekno</a></li>
+                        <li><a href="#" class="hover:text-white transition">Otomotif</a></li>
+                    </ul>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h3 class="font-bold text-lg mb-4 text-amber-200 font-serif">Perusahaan</h3>
+                    <ul class="space-y-2 text-sm text-red-50">
+                        <li><a href="#" class="hover:text-white transition">Tentang Kami</a></li>
+                        <li><a href="#" class="hover:text-white transition">Redaksi</a></li>
+                        <li><a href="#" class="hover:text-white transition">Pedoman Media Siber</a></li>
+                        <li><a href="#" class="hover:text-white transition">Karir</a></li>
+                        <li><a href="#" class="hover:text-white transition">Kontak</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h3 class="font-bold text-lg mb-4 text-amber-200 font-serif">Hubungi Kami</h3>
+                    <ul class="space-y-3 text-sm text-red-50">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 mt-0.5 text-amber-300"></i>
+                            <span>Jl. Perintis Kemerdekaan No.KM.10,<br>Tamalanrea Indah, Kec. Tamalanrea,<br>Kota Makassar, Sulawesi Selatan 90245</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="phone" class="w-5 h-5 text-amber-300"></i>
+                            <span>+62 123 456 7890</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="mail" class="w-5 h-5 text-amber-300"></i>
+                            <span>redaksi@dailiriz.id</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-red-100">
+                <p>&copy; 2025 Dailiriz. Hak Cipta Dilindungi Undang-Undang.</p>
+                <div class="flex gap-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white">Kebijakan Privasi</a>
+                    <a href="#" class="hover:text-white">Syarat & Ketentuan</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Dynamic Date
+        const dateElement = document.getElementById('current-date');
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const today = new Date();
+        dateElement.textContent = today.toLocaleDateString('id-ID', options);
+
+        // Get article ID from URL
+        function getArticleId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Load article data
+        async function loadArticle() {
+            const articleId = getArticleId();
+            if (!articleId) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                
+                // Find the article
+                let article = null;
+                
+                // Check featured article
+                if (data.featured_article.id === articleId) {
+                    article = data.featured_article;
+                }
+                
+                // Check latest news
+                if (!article) {
+                    article = data.latest_news.find(a => a.id === articleId);
+                }
+                
+                // Check popular articles
+                if (!article) {
+                    article = data.popular_articles.find(a => a.id === articleId);
+                }
+
+                if (!article) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                // Update page title
+                document.title = `${article.title} | Dailiriz`;
+
+                // Update article content
+                document.getElementById('article-category').textContent = article.category;
+                document.getElementById('article-category-badge').textContent = article.category;
+                document.getElementById('article-title').textContent = article.title;
+                document.getElementById('article-date').textContent = today.toLocaleDateString('id-ID', options);
+                
+                if (article.image) {
+                    document.getElementById('article-image').src = article.image;
+                    document.getElementById('article-image').alt = article.title;
+                }
+
+                // Format and display content
+                if (article.full_content) {
+                    const contentElement = document.getElementById('article-content');
+                    const paragraphs = article.full_content.split('\n\n');
+                    
+                    paragraphs.forEach(paragraph => {
+                        const p = document.createElement('p');
+                        p.textContent = paragraph;
+                        contentElement.appendChild(p);
+                    });
+                }
+
+                // Load related articles (exclude current article)
+                loadRelatedArticles(data, articleId);
+
+                // Share functionality
+                document.getElementById('share-btn').addEventListener('click', () => {
+                    if (navigator.share) {
+                        navigator.share({
+                            title: article.title,
+                            text: article.description,
+                            url: window.location.href,
+                        });
+                    } else {
+                        // Fallback: Copy to clipboard
+                        navigator.clipboard.writeText(window.location.href);
+                        alert('Link berhasil disalin!');
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error loading article:', error);
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Load related articles
+        function loadRelatedArticles(data, currentArticleId) {
+            const relatedArticlesContainer = document.getElementById('related-articles');
+            const allArticles = [
+                data.featured_article,
+                ...data.latest_news,
+                ...data.popular_articles
+            ];
+            
+            // Filter out current article and get 3 random articles
+            const relatedArticles = allArticles
+                .filter(article => article.id !== currentArticleId)
+                .slice(0, 3);
+            
+            relatedArticles.forEach(article => {
+                const articleElement = document.createElement('article');
+                articleElement.className = 'bg-white rounded-lg shadow-sm hover:shadow-lg transition duration-300 overflow-hidden group cursor-pointer';
+                articleElement.innerHTML = `
+                    <div class="h-48 overflow-hidden">
+                        <img src="${article.image}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500" alt="${article.category}">
+                    </div>
+                    <div class="p-4">
+                        <span class="text-xs font-bold text-red-600 uppercase">${article.category}</span>
+                        <h4 class="font-serif font-bold text-lg mt-2 mb-2 leading-snug group-hover:text-red-700 line-clamp-2">${article.title}</h4>
+                        <p class="text-slate-600 text-sm line-clamp-3">${article.description || ''}</p>
+                    </div>
+                `;
+                
+                articleElement.addEventListener('click', () => {
+                    window.location.href = `article.html?id=${article.id}`;
+                });
+                
+                relatedArticlesContainer.appendChild(articleElement);
+            });
+        }
+
+        // Load article on page load
+        document.addEventListener('DOMContentLoaded', loadArticle);
+    </script>
+</body>
+</html>
