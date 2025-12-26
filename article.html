@@ -90,6 +90,132 @@
             padding-left: 2rem;
             margin-bottom: 1.5rem;
         }
+        
+        /* Responsive adjustments for mobile */
+        @media (max-width: 768px) {
+            .article-content h2 {
+                font-size: 1.3rem;
+                margin-top: 1.5rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .article-content h3 {
+                font-size: 1.1rem;
+                margin-top: 1.25rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .article-content p {
+                font-size: 0.95rem;
+                line-height: 1.7;
+                margin-bottom: 1.25rem;
+            }
+            
+            .article-content blockquote {
+                padding-left: 1rem;
+                margin: 1.5rem 0;
+            }
+            
+            .article-content ul,
+            .article-content ol {
+                padding-left: 1.5rem;
+            }
+            
+            /* Share buttons stacking on mobile */
+            .share-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .share-buttons button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            #article-title {
+                font-size: 1.75rem !important;
+                line-height: 1.3 !important;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                gap: 0.5rem !important;
+                align-items: flex-start !important;
+            }
+            
+            .article-meta > div {
+                margin-bottom: 0.25rem;
+            }
+            
+            /* Related articles - 1 column on mobile */
+            #related-articles {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* Comment section adjustments */
+            .comment-input textarea {
+                font-size: 0.9rem;
+            }
+            
+            /* Footer adjustments */
+            footer .grid {
+                grid-template-columns: 1fr !important;
+                gap: 2rem !important;
+            }
+        }
+        
+        /* Mobile menu animation */
+        .mobile-menu-enter {
+            max-height: 0;
+            opacity: 0;
+        }
+        
+        .mobile-menu-enter-active {
+            max-height: 500px;
+            opacity: 1;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+        }
+        
+        .mobile-menu-exit {
+            max-height: 500px;
+            opacity: 1;
+        }
+        
+        .mobile-menu-exit-active {
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+        }
+        
+        /* Image hover effect */
+        .image-hover-zoom {
+            overflow: hidden;
+        }
+        
+        .image-hover-zoom img {
+            transition: transform 0.5s ease;
+        }
+        
+        .image-hover-zoom:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Text truncation */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="bg-stone-50 text-slate-800">
@@ -104,7 +230,7 @@
     </div>
 
     <!-- Header with Red-Gold Gradient -->
-    <header class="bg-gradient-to-r from-red-900 via-red-600 to-amber-400 shadow-lg">
+    <header class="bg-gradient-to-r from-red-900 via-red-600 to-amber-400 shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <!-- Logo -->
@@ -117,41 +243,66 @@
 
                 <!-- Desktop Nav -->
                 <nav class="hidden md:flex space-x-8 text-white font-medium text-sm tracking-wider">
-                    <a href="index.html" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">BERANDA</a>
                     <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">NASIONAL</a>
                     <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">EKONOMI</a>
                     <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">TEKNOLOGI</a>
+                    <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">GAYA HIDUP</a>
+                    <a href="#" class="hover:text-amber-200 transition-colors border-b-2 border-transparent hover:border-amber-200 pb-1">OPINI</a>
                 </nav>
 
-                <!-- Search & Share -->
+                <!-- Search & Mobile Menu -->
                 <div class="flex items-center gap-4">
-                    <button id="share-btn" class="text-white hover:text-amber-200 transition flex items-center gap-2">
+                    <button id="share-btn" class="text-white hover:text-amber-200 transition flex items-center gap-2 hidden md:flex">
                         <i data-lucide="share-2" class="w-5 h-5"></i>
                         <span class="hidden md:inline text-sm">Bagikan</span>
                     </button>
-                    <a href="index.html" class="text-white hover:text-amber-200 transition">
+                    <a href="index.html" class="text-white hover:text-amber-200 transition hidden md:flex">
                         <i data-lucide="home" class="w-5 h-5"></i>
                     </a>
+                    <button class="text-white hover:text-amber-200 transition">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="md:hidden text-white">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-red-900 border-t border-red-700">
+            <div class="flex flex-col p-4 space-y-3 text-white font-medium">
+                <a href="index.html" class="hover:text-amber-300 py-2">Beranda</a>
+                <a href="#" class="hover:text-amber-300 py-2">Nasional</a>
+                <a href="#" class="hover:text-amber-300 py-2">Ekonomi</a>
+                <a href="#" class="hover:text-amber-300 py-2">Teknologi</a>
+                <a href="#" class="hover:text-amber-300 py-2">Gaya Hidup</a>
+                <a href="#" class="hover:text-amber-300 py-2">Opini</a>
+                <div class="pt-2 border-t border-red-700 mt-2">
+                    <button id="mobile-share-btn" class="flex items-center gap-2 hover:text-amber-300 w-full py-2">
+                        <i data-lucide="share-2" class="w-5 h-5"></i>
+                        <span>Bagikan Artikel</span>
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Main Article Content -->
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-6 md:py-8">
         <div class="max-w-4xl mx-auto">
             <!-- Breadcrumb -->
-            <nav class="mb-8 text-sm text-slate-500">
+            <nav class="mb-6 md:mb-8 text-sm text-slate-500">
                 <a href="index.html" class="hover:text-red-600">Beranda</a>
                 <span class="mx-2">/</span>
                 <span id="article-category" class="text-red-600 font-medium"></span>
             </nav>
 
             <!-- Article Header -->
-            <header class="mb-8">
-                <span id="article-category-badge" class="inline-block bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full mb-4"></span>
-                <h1 id="article-title" class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-4"></h1>
-                <div class="flex items-center gap-4 text-slate-600 text-sm mb-6">
+            <header class="mb-6 md:mb-8">
+                <span id="article-category-badge" class="inline-block bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full mb-3 md:mb-4"></span>
+                <h1 id="article-title" class="font-serif text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-900 leading-tight mb-3 md:mb-4"></h1>
+                <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 text-slate-600 text-sm mb-4 md:mb-6 article-meta">
                     <div class="flex items-center gap-2">
                         <i data-lucide="user" class="w-4 h-4"></i>
                         <span id="article-author">Redaksi Dailiriz</span>
@@ -168,31 +319,31 @@
             </header>
 
             <!-- Featured Image -->
-            <div class="mb-8 rounded-xl overflow-hidden shadow-lg">
-                <img id="article-image" src="" alt="" class="w-full h-auto max-h-[500px] object-cover">
-                <p class="text-xs text-slate-500 mt-2 italic">Sumber: <span id="image-source">Unsplash</span></p>
+            <div class="mb-6 md:mb-8 rounded-xl overflow-hidden shadow-lg image-hover-zoom">
+                <img id="article-image" src="" alt="" class="w-full h-auto max-h-[300px] md:max-h-[400px] lg:max-h-[500px] object-cover">
+                <p class="text-xs text-slate-500 mt-2 px-2 md:px-0 italic">Sumber: <span id="image-source">Unsplash</span></p>
             </div>
 
             <!-- Article Content -->
-            <article class="prose prose-lg max-w-none mb-12">
+            <article class="prose prose-lg max-w-none mb-8 md:mb-12 px-2 md:px-0">
                 <div id="article-content" class="article-content text-slate-700">
                     <!-- Content will be loaded here -->
                 </div>
             </article>
 
             <!-- Share Section -->
-            <div class="bg-slate-50 p-6 rounded-xl mb-12">
-                <h3 class="font-bold text-lg mb-4 text-slate-800">Bagikan Artikel Ini</h3>
-                <div class="flex gap-4">
-                    <button class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            <div class="bg-slate-50 p-4 md:p-6 rounded-xl mb-8 md:mb-12">
+                <h3 class="font-bold text-lg mb-3 md:mb-4 text-slate-800">Bagikan Artikel Ini</h3>
+                <div class="flex flex-col md:flex-row gap-2 md:gap-4 share-buttons">
+                    <button class="flex items-center justify-center md:justify-start gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
                         <i data-lucide="facebook" class="w-4 h-4"></i>
                         Facebook
                     </button>
-                    <button class="flex items-center gap-2 bg-blue-400 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition">
+                    <button class="flex items-center justify-center md:justify-start gap-2 bg-blue-400 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition">
                         <i data-lucide="twitter" class="w-4 h-4"></i>
                         Twitter
                     </button>
-                    <button class="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+                    <button class="flex items-center justify-center md:justify-start gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
                         <i data-lucide="link" class="w-4 h-4"></i>
                         Salin Link
                     </button>
@@ -200,31 +351,31 @@
             </div>
 
             <!-- Related Articles -->
-            <section class="mb-16">
-                <h2 class="font-serif text-2xl font-bold text-slate-800 mb-6 pb-2 border-b border-slate-200">Artikel Terkait</h2>
-                <div id="related-articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <section class="mb-10 md:mb-16">
+                <h2 class="font-serif text-xl md:text-2xl font-bold text-slate-800 mb-4 md:mb-6 pb-2 border-b border-slate-200">Artikel Terkait</h2>
+                <div id="related-articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                     <!-- Related articles will be loaded here -->
                 </div>
             </section>
 
             <!-- Comments Section -->
-            <section class="bg-white rounded-xl shadow-sm p-6 mb-12">
-                <h2 class="font-serif text-2xl font-bold text-slate-800 mb-6">Komentar</h2>
-                <div class="mb-8">
-                    <textarea placeholder="Tulis komentar Anda..." class="w-full p-4 border border-slate-300 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200" rows="4"></textarea>
-                    <button class="mt-4 bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition">Kirim Komentar</button>
+            <section class="bg-white rounded-xl shadow-sm p-4 md:p-6 mb-8 md:mb-12">
+                <h2 class="font-serif text-xl md:text-2xl font-bold text-slate-800 mb-4 md:mb-6">Komentar</h2>
+                <div class="mb-6 md:mb-8 comment-input">
+                    <textarea placeholder="Tulis komentar Anda..." class="w-full p-3 md:p-4 border border-slate-300 rounded-lg focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 text-sm md:text-base" rows="4"></textarea>
+                    <button class="mt-3 md:mt-4 bg-red-600 text-white px-5 md:px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition w-full md:w-auto">Kirim Komentar</button>
                 </div>
-                <div class="space-y-6">
+                <div class="space-y-4 md:space-y-6">
                     <!-- Sample Comments -->
-                    <div class="border-b border-slate-100 pb-6">
-                        <div class="flex items-start gap-4">
-                            <img src="https://ui-avatars.com/api/?name=Ahmad+Santoso&background=random" class="w-10 h-10 rounded-full" alt="Commenter">
-                            <div>
-                                <div class="flex items-center gap-2 mb-2">
-                                    <h4 class="font-bold text-slate-800">Ahmad Santoso</h4>
+                    <div class="border-b border-slate-100 pb-4 md:pb-6">
+                        <div class="flex items-start gap-3 md:gap-4">
+                            <img src="https://ui-avatars.com/api/?name=Ahmad+Santoso&background=random" class="w-8 h-8 md:w-10 md:h-10 rounded-full" alt="Commenter">
+                            <div class="flex-1">
+                                <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-2 mb-1 md:mb-2">
+                                    <h4 class="font-bold text-slate-800 text-sm md:text-base">Ahmad Santoso</h4>
                                     <span class="text-xs text-slate-500">2 jam yang lalu</span>
                                 </div>
-                                <p class="text-slate-600">Artikel yang sangat informatif! Saya sangat mendukung program infrastruktur hijau ini.</p>
+                                <p class="text-slate-600 text-sm md:text-base">Artikel yang sangat informatif! Saya sangat mendukung program infrastruktur hijau ini.</p>
                             </div>
                         </div>
                     </div>
@@ -234,32 +385,32 @@
     </main>
 
     <!-- Footer dengan gradient merah-emas -->
-    <footer class="bg-gradient-to-r from-red-900 via-red-600 to-amber-400 text-white pt-12 pb-8 mt-auto">
+    <footer class="bg-gradient-to-r from-red-900 via-red-600 to-amber-400 text-white pt-8 md:pt-12 pb-6 md:pb-8 mt-auto">
         <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mb-8 md:mb-12">
                 
                 <!-- Brand Column -->
-                <div class="space-y-4">
-                    <div class="flex items-center gap-2 mb-4">
-                        <i data-lucide="newspaper" class="text-white w-8 h-8"></i>
-                        <h2 class="font-serif text-2xl font-bold tracking-wide">
+                <div class="space-y-3 md:space-y-4">
+                    <div class="flex items-center gap-2 mb-3 md:mb-4">
+                        <i data-lucide="newspaper" class="text-white w-7 h-7 md:w-8 md:h-8"></i>
+                        <h2 class="font-serif text-xl md:text-2xl font-bold tracking-wide">
                             Daili<span class="text-amber-200 italic">Riz</span>
                         </h2>
                     </div>
-                    <p class="text-red-100 text-sm leading-relaxed">
+                    <p class="text-red-100 text-xs md:text-sm leading-relaxed">
                         Menyajikan berita terpercaya, tajam, dan berimbang dari seluruh pelosok negeri untuk membangun wawasan bangsa.
                     </p>
-                    <div class="flex gap-4 mt-4">
-                        <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>
-                        <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="twitter" class="w-4 h-4"></i></a>
-                        <a href="#" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                    <div class="flex gap-3 md:gap-4 mt-3 md:mt-4">
+                        <a href="#" class="w-7 h-7 md:w-8 md:h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="facebook" class="w-3 h-3 md:w-4 md:h-4"></i></a>
+                        <a href="#" class="w-7 h-7 md:w-8 md:h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="twitter" class="w-3 h-3 md:w-4 md:h-4"></i></a>
+                        <a href="#" class="w-7 h-7 md:w-8 md:h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition"><i data-lucide="instagram" class="w-3 h-3 md:w-4 md:h-4"></i></a>
                     </div>
                 </div>
 
                 <!-- Links -->
                 <div>
-                    <h3 class="font-bold text-lg mb-4 text-amber-200 font-serif">Kategori</h3>
-                    <ul class="space-y-2 text-sm text-red-50">
+                    <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4 text-amber-200 font-serif">Kategori</h3>
+                    <ul class="space-y-1 md:space-y-2 text-xs md:text-sm text-red-50">
                         <li><a href="#" class="hover:text-white transition">Politik & Hukum</a></li>
                         <li><a href="#" class="hover:text-white transition">Ekonomi Bisnis</a></li>
                         <li><a href="#" class="hover:text-white transition">Olahraga</a></li>
@@ -270,8 +421,8 @@
 
                 <!-- Links -->
                 <div>
-                    <h3 class="font-bold text-lg mb-4 text-amber-200 font-serif">Perusahaan</h3>
-                    <ul class="space-y-2 text-sm text-red-50">
+                    <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4 text-amber-200 font-serif">Perusahaan</h3>
+                    <ul class="space-y-1 md:space-y-2 text-xs md:text-sm text-red-50">
                         <li><a href="#" class="hover:text-white transition">Tentang Kami</a></li>
                         <li><a href="#" class="hover:text-white transition">Redaksi</a></li>
                         <li><a href="#" class="hover:text-white transition">Pedoman Media Siber</a></li>
@@ -282,27 +433,27 @@
 
                 <!-- Contact -->
                 <div>
-                    <h3 class="font-bold text-lg mb-4 text-amber-200 font-serif">Hubungi Kami</h3>
-                    <ul class="space-y-3 text-sm text-red-50">
-                        <li class="flex items-start gap-3">
-                            <i data-lucide="map-pin" class="w-5 h-5 mt-0.5 text-amber-300"></i>
+                    <h3 class="font-bold text-base md:text-lg mb-3 md:mb-4 text-amber-200 font-serif">Hubungi Kami</h3>
+                    <ul class="space-y-2 md:space-y-3 text-xs md:text-sm text-red-50">
+                        <li class="flex items-start gap-2 md:gap-3">
+                            <i data-lucide="map-pin" class="w-4 h-4 md:w-5 md:h-5 mt-0.5 text-amber-300 flex-shrink-0"></i>
                             <span>Jl. Perintis Kemerdekaan No.KM.10,<br>Tamalanrea Indah, Kec. Tamalanrea,<br>Kota Makassar, Sulawesi Selatan 90245</span>
                         </li>
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="phone" class="w-5 h-5 text-amber-300"></i>
+                        <li class="flex items-center gap-2 md:gap-3">
+                            <i data-lucide="phone" class="w-4 h-4 md:w-5 md:h-5 text-amber-300 flex-shrink-0"></i>
                             <span>+62 123 456 7890</span>
                         </li>
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="mail" class="w-5 h-5 text-amber-300"></i>
+                        <li class="flex items-center gap-2 md:gap-3">
+                            <i data-lucide="mail" class="w-4 h-4 md:w-5 md:h-5 text-amber-300 flex-shrink-0"></i>
                             <span>redaksi@dailiriz.id</span>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-red-100">
-                <p>&copy; 2025 Dailiriz. Hak Cipta Dilindungi Undang-Undang.</p>
-                <div class="flex gap-6 mt-4 md:mt-0">
+            <div class="border-t border-white/20 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-red-100">
+                <p class="text-center md:text-left mb-2 md:mb-0">&copy; 2025 Dailiriz. Hak Cipta Dilindungi Undang-Undang.</p>
+                <div class="flex gap-4 md:gap-6">
                     <a href="#" class="hover:text-white">Kebijakan Privasi</a>
                     <a href="#" class="hover:text-white">Syarat & Ketentuan</a>
                 </div>
@@ -313,6 +464,15 @@
     <script>
         // Initialize Lucide Icons
         lucide.createIcons();
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileShareBtn = document.getElementById('mobile-share-btn');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
 
         // Dynamic Date
         const dateElement = document.getElementById('current-date');
@@ -385,17 +545,23 @@
                         p.textContent = paragraph;
                         contentElement.appendChild(p);
                     });
+                } else if (article.description) {
+                    // Fallback to description if no full content
+                    const contentElement = document.getElementById('article-content');
+                    const p = document.createElement('p');
+                    p.textContent = article.description;
+                    contentElement.appendChild(p);
                 }
 
                 // Load related articles (exclude current article)
                 loadRelatedArticles(data, articleId);
 
                 // Share functionality
-                document.getElementById('share-btn').addEventListener('click', () => {
+                const shareFunction = () => {
                     if (navigator.share) {
                         navigator.share({
                             title: article.title,
-                            text: article.description,
+                            text: article.description || article.title,
                             url: window.location.href,
                         });
                     } else {
@@ -403,6 +569,32 @@
                         navigator.clipboard.writeText(window.location.href);
                         alert('Link berhasil disalin!');
                     }
+                };
+
+                // Add share event to desktop button
+                const shareBtn = document.getElementById('share-btn');
+                if (shareBtn) {
+                    shareBtn.addEventListener('click', shareFunction);
+                }
+
+                // Add share event to mobile button
+                if (mobileShareBtn) {
+                    mobileShareBtn.addEventListener('click', shareFunction);
+                }
+
+                // Add share event to share buttons in content
+                document.querySelectorAll('.share-buttons button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const platform = this.textContent.trim();
+                        if (platform === 'Salin Link') {
+                            navigator.clipboard.writeText(window.location.href);
+                            alert('Link berhasil disalin!');
+                        } else {
+                            // For Facebook and Twitter, you would typically open a new window
+                            // This is a simplified version
+                            alert(`Berbagi ke ${platform} (simulasi)`);
+                        }
+                    });
                 });
 
             } catch (error) {
@@ -429,13 +621,13 @@
                 const articleElement = document.createElement('article');
                 articleElement.className = 'bg-white rounded-lg shadow-sm hover:shadow-lg transition duration-300 overflow-hidden group cursor-pointer';
                 articleElement.innerHTML = `
-                    <div class="h-48 overflow-hidden">
+                    <div class="h-40 md:h-48 overflow-hidden">
                         <img src="${article.image}" class="w-full h-full object-cover transform group-hover:scale-110 transition duration-500" alt="${article.category}">
                     </div>
-                    <div class="p-4">
+                    <div class="p-3 md:p-4">
                         <span class="text-xs font-bold text-red-600 uppercase">${article.category}</span>
-                        <h4 class="font-serif font-bold text-lg mt-2 mb-2 leading-snug group-hover:text-red-700 line-clamp-2">${article.title}</h4>
-                        <p class="text-slate-600 text-sm line-clamp-3">${article.description || ''}</p>
+                        <h4 class="font-serif font-bold text-base md:text-lg mt-1 md:mt-2 mb-1 md:mb-2 leading-snug group-hover:text-red-700 line-clamp-2">${article.title}</h4>
+                        <p class="text-slate-600 text-xs md:text-sm line-clamp-2 md:line-clamp-3">${article.description || ''}</p>
                     </div>
                 `;
                 
@@ -446,6 +638,13 @@
                 relatedArticlesContainer.appendChild(articleElement);
             });
         }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!mobileMenu.contains(event.target) && !mobileMenuBtn.contains(event.target) && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
 
         // Load article on page load
         document.addEventListener('DOMContentLoaded', loadArticle);
